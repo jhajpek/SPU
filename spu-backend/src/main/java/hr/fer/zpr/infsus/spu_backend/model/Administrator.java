@@ -13,4 +13,13 @@ import lombok.Setter;
 @NoArgsConstructor
 public class Administrator extends Korisnik {
 
+    public void kreirajDogadaj() {
+    }
+
+    public void urediDogadaj(Dogadaj dogadaj) {
+    }
+
+    public void obrisiDogadaj(Dogadaj dogadaj) {
+    }
+
 }

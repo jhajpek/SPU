@@ -49,4 +49,8 @@ public class Rezervacija {
     @JoinColumn(name = "sjedalo_id", nullable = false)
     private Sjedalo sjedalo;
 
+    public boolean istekla() {
+        return LocalDateTime.now().isAfter(datumVrijemeIsteka);
+    }
+
 }

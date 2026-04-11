@@ -1,5 +1,8 @@
 package hr.fer.zpr.infsus.spu_backend.model;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -8,6 +11,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
@@ -43,5 +47,11 @@ public class Sektor {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "dvorana_id", nullable = false)
     private Dvorana dvorana;
+
+    @OneToMany(mappedBy = "sektor")
+    private List<Sjedalo> sjedala = new ArrayList<>();
+
+    @OneToMany(mappedBy = "sektor")
+    private List<Cjenik> cjenici = new ArrayList<>();
 
 }

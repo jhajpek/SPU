@@ -62,4 +62,6 @@ public class Ulaznica {
     @JoinColumn(name = "sjedalo_id", nullable = false)
     private Sjedalo sjedalo;
 
+    public boolean imaSlobodnihMjesta() { return true; }
+
 }
