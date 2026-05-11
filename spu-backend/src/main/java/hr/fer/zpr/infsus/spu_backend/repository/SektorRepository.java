@@ -1,0 +1,12 @@
+package hr.fer.zpr.infsus.spu_backend.repository;
+
+import hr.fer.zpr.infsus.spu_backend.model.Sektor;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+import java.util.List;
+
+public interface SektorRepository extends JpaRepository<Sektor, Long> {
+
+    List<Sektor> findAllByDvorana_DvoranaId(Long dvoranaId);
+
+}

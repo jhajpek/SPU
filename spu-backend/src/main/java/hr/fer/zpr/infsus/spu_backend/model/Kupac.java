@@ -23,11 +23,4 @@ public class Kupac extends Korisnik {
     @OneToMany(mappedBy = "kupac")
     private List<Rezervacija> rezervacije = new ArrayList<>();
 
-    public void kupiUlaznicu() {
-    }
-
-    public List<Ulaznica> pregledajKupnje() {
-        return ulaznice;
-    }
-
 }

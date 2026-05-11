@@ -68,8 +68,4 @@ public class Dogadaj {
     @OneToMany(mappedBy = "dogadaj", cascade = CascadeType.ALL)
     private List<Cjenik> cjenici = new ArrayList<>();
 
-    public boolean imaSlobodnihMjesta() {
-        return true;
-    }
-
 }

@@ -22,9 +22,12 @@ import java.time.LocalDateTime;
 
 @Entity
 @Table(
-        name = "ULAZNICA",
+        name = "ulaznica",
         uniqueConstraints = {
-                @UniqueConstraint(name = "unique_dogadaj_sjedalo", columnNames = {"dogadaj_id", "sjedalo_id"})
+                @UniqueConstraint(
+                        name = "unique_dogadaj_sjedalo",
+                        columnNames = {"dogadaj_id", "sjedalo_id"}
+                )
         }
 )
 @Getter
@@ -61,7 +64,5 @@ public class Ulaznica {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "sjedalo_id", nullable = false)
     private Sjedalo sjedalo;
-
-    public boolean imaSlobodnihMjesta() { return true; }
 
 }
