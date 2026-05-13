@@ -93,6 +93,7 @@ public class DogadajController {
 
 		if (bindingResult.hasErrors()) {
 			model.addAttribute("dvorane", dvoranaService.findAll());
+			model.addAttribute("sektori", sektorService.findByDvorana(dto.getDvoranaId()));
 			return "dogadaji/form";
 		}
 
