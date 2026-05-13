@@ -3,6 +3,7 @@ package hr.fer.zpr.infsus.spu_backend.model;
 import java.util.ArrayList;
 import java.util.List;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -27,25 +28,25 @@ import lombok.Setter;
 @NoArgsConstructor
 public class Dvorana {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "dvorana_id")
-    private Long dvoranaId;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "dvorana_id")
+	private Long dvoranaId;
 
-    @NotBlank
-    @Size(max = 50)
-    @Column(length = 50, nullable = false)
-    private String naziv;
+	@NotBlank
+	@Size(max = 50)
+	@Column(length = 50, nullable = false)
+	private String naziv;
 
-    @NotNull
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "lokacija_id", nullable = false)
-    private Lokacija lokacija;
+	@NotNull
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "lokacija_id", nullable = false)
+	private Lokacija lokacija;
 
-    @OneToMany(mappedBy = "dvorana")
-    private List<Sektor> sektori = new ArrayList<>();
+	@OneToMany(mappedBy = "dvorana", cascade = CascadeType.ALL, orphanRemoval = true)
+	private List<Sektor> sektori = new ArrayList<>();
 
-    @OneToMany(mappedBy = "dvorana")
-    private List<Dogadaj> dogadaji = new ArrayList<>();
+	@OneToMany(mappedBy = "dvorana")
+	private List<Dogadaj> dogadaji = new ArrayList<>();
 
 }

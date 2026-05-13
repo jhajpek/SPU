@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="hr" xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8" />
+
+    <title>Sustav za prodaju ulaznica</title>
+
+    <link rel="stylesheet" th:href="@{/css/style.css}" />
+  </head>
+
+  <body>
+    <div class="container">
+      <div class="top-bar">
+        <h1>Sustav za prodaju ulaznica</h1>
+
+        <div class="actions">
+          <a class="btn" th:href="@{/dogadaji}"> Događaji </a>
+
+          <a class="btn" th:href="@{/dvorane}"> Dvorane </a>
+
+          <a class="btn" th:href="@{/sektori}"> Sektori </a>
+        </div>
+      </div>
+
+      <h2
+        th:text="${sektor.sektorId} != null
+            ? 'Uređivanje sektora'
+            : 'Dodavanje sektora'"
+      ></h2>
+
+      <form
+        th:action="${sektor.sektorId == null}
+            ? @{/sektori}
+            : @{/sektori/edit/{id}(id=${sektor.sektorId})}"
+        th:object="${sektor}"
+        method="post"
+      >
+        <input type="hidden" th:field="*{sektorId}" />
+
+        <div>
+          <label>Naziv sektora</label>
+
+          <input
+            type="text"
+            th:field="*{naziv}"
+            placeholder="Unesite naziv sektora"
+          />
+
+          <span
+            class="error"
+            th:if="${#fields.hasErrors('naziv')}"
+            th:errors="*{naziv}"
+          >
+          </span>
+        </div>
+
+        <div>
+          <label>Kapacitet</label>
+
+          <input
+            type="number"
+            th:field="*{kapacitet}"
+            placeholder="Unesite kapacitet"
+          />
+
+          <span
+            class="error"
+            th:if="${#fields.hasErrors('kapacitet')}"
+            th:errors="*{kapacitet}"
+          >
+          </span>
+        </div>
+
+        <div>
+          <label>Dvorana</label>
+
+          <select th:field="*{dvoranaId}">
+            <option value="">-- Odaberi dvoranu --</option>
+
+            <option
+              th:each="dvorana : ${dvorane}"
+              th:value="${dvorana.dvoranaId}"
+              th:text="${dvorana.naziv}"
+            ></option>
+          </select>
+
+          <span
+            class="error"
+            th:if="${#fields.hasErrors('dvoranaId')}"
+            th:errors="*{dvoranaId}"
+          >
+          </span>
+        </div>
+
+        <br />
+
+        <div class="actions">
+          <button type="submit">Spremi</button>
+
+          <a class="btn" th:href="@{/sektori}"> Odustani </a>
+        </div>
+      </form>
+    </div>
+  </body>
+</html>

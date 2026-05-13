@@ -35,3 +35,4 @@ build/
 
 ### Environmental Variables ###
 .env
+/.apt_generated_tests/

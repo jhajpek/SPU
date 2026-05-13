@@ -59,10 +59,10 @@ public class Dogadaj {
     @JoinColumn(name = "dvorana_id", nullable = false)
     private Dvorana dvorana;
 
-    @OneToMany(mappedBy = "dogadaj", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "dogadaj")
     private List<Ulaznica> ulaznice = new ArrayList<>();
 
-    @OneToMany(mappedBy = "dogadaj", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "dogadaj")
     private List<Rezervacija> rezervacije = new ArrayList<>();
 
     @OneToMany(mappedBy = "dogadaj", cascade = CascadeType.ALL)

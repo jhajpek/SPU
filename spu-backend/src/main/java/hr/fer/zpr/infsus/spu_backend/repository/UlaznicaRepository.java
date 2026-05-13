@@ -8,12 +8,14 @@ import java.util.Optional;
 
 public interface UlaznicaRepository extends JpaRepository<Ulaznica, Long> {
 
-    Optional<Ulaznica> findByQrKod(String qrKod);
+	Optional<Ulaznica> findByQrKod(String qrKod);
 
-    boolean existsByDogadaj_DogadajIdAndSjedalo_SjedaloId(Long dogadajId, Long sjedaloId);
+	boolean existsByDogadaj_DogadajIdAndSjedalo_SjedaloId(Long dogadajId, Long sjedaloId);
 
-    List<Ulaznica> findAllByKupac_KorisnikIdOrderByDatumVrijemeKupnjeDesc(Long kupacId);
+	List<Ulaznica> findAllByKupac_KorisnikIdOrderByDatumVrijemeKupnjeDesc(Long kupacId);
 
-    List<Ulaznica> findAllByDogadaj_DogadajId(Long dogadajId);
+	List<Ulaznica> findAllByDogadaj_DogadajId(Long dogadajId);
+
+	long countByDogadaj_DogadajIdAndSjedalo_Sektor_SektorId(Long dogadajId, Long sektorId);
 
 }

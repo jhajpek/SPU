@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="hr" xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Sustav za prodaju ulaznica</title>
+
+    <link rel="stylesheet" th:href="@{/css/style.css}" />
+  </head>
+
+  <body>
+    <div class="container">
+      <div class="top-bar">
+        <h1>Sustav za prodaju ulaznica</h1>
+        <div class="actions">
+          <a class="btn" th:href="@{/dvorane}"> Dvorane </a>
+
+          <a class="btn" th:href="@{/sektori}"> Sektori </a>
+
+          <a class="btn" th:href="@{/dogadaji/new}" id="addbtn">
+            Dodaj događaj
+          </a>
+        </div>
+      </div>
+      <h2>Popis događaja</h2>
+      <div th:if="${successMessage}" class="success">
+        <span th:text="${successMessage}"></span>
+      </div>
+
+      <div th:if="${errorMessage}" class="error">
+        <span th:text="${errorMessage}"></span>
+      </div>
+
+      <form class="search-form" th:action="@{/dogadaji}" method="get">
+        <div>
+          <label>Naziv</label>
+
+          <input type="text" name="naziv" placeholder="Naziv događaja" th:value="${naziv}"/>
+        </div>
+
+        <div>
+          <label>Kategorija</label>
+
+          <input type="text" name="kategorija" th:value="${kategorija}" />
+        </div>
+
+        <div>
+          <button type="submit">Pretraži</button>
+        </div>
+      </form>
+
+      <table>
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Naziv</th>
+            <th>Kategorija</th>
+            <th>Opis</th>
+            <th>Datum</th>
+            <th>Dvorana</th>
+            <th>Akcije</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr th:each="dogadaj : ${dogadaji}">
+            <td th:text="${dogadaj.dogadajId}"></td>
+
+            <td th:text="${dogadaj.naziv}"  id="naziv"></td>
+
+            <td th:text="${dogadaj.kategorija}"></td>
+
+            <td th:text="${dogadaj.opis}"></td>
+
+            <td
+              th:text="${#temporals.format(dogadaj.datumVrijemeOdrzavanja, 'dd.MM.yyyy. HH:mm')}"
+            ></td>
+
+            <td
+              th:text="${dogadaj.dvorana.naziv + ', ' + dogadaj.dvorana.lokacija.ulica + ' '
+                    + dogadaj.dvorana.lokacija.kucniBroj + ', '
+                    + dogadaj.dvorana.lokacija.postanskiBroj + ' '
+                    + dogadaj.dvorana.lokacija.mjesto}"
+            ></td>
+
+            <td>
+              <div class="actions">
+                <a
+                  class="btn"
+                  th:href="@{/dogadaji/{id}(id=${dogadaj.dogadajId})}"
+                >
+                  Detalji
+                </a>
+
+                <a
+                  class="btn"
+                  th:href="@{/dogadaji/edit/{id}(id=${dogadaj.dogadajId})}"
+                >
+                  Uredi
+                </a>
+
+                <form
+                  th:action="@{/dogadaji/delete/{id}(id=${dogadaj.dogadajId})}"
+                  method="post"
+                  onsubmit="return confirm('Jeste li sigurni?');"
+                >
+                  <button type="submit" id="deletebtn">Obriši</button>
+                </form>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,132 @@
+<!doctype html>
+<html lang="hr" xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8" />
+
+    <title>Sustav za prodaju ulaznica</title>
+
+    <link rel="stylesheet" th:href="@{/css/style.css}" />
+  </head>
+
+  <body>
+    <div class="container">
+      <div class="top-bar">
+        <h1>Sustav za prodaju ulaznica</h1>
+
+        <div class="actions">
+          <a class="btn" th:href="@{/dogadaji}"> Događaji </a>
+
+          <a class="btn" th:href="@{/dvorane}"> Dvorane </a>
+
+          <a class="btn" th:href="@{/sektori/new}" id="addbtn">
+            Dodaj sektor
+          </a>
+        </div>
+      </div>
+      <h2>Popis sektora</h2>
+      <div th:if="${successMessage}" class="success">
+        <span th:text="${successMessage}"></span>
+      </div>
+
+      <div th:if="${errorMessage}" class="error">
+        <span th:text="${errorMessage}"></span>
+      </div>
+
+      <form class="search-form" th:action="@{/sektori}" method="get">
+        <div>
+          <label>Naziv</label>
+
+          <input
+            type="text"
+            name="naziv"
+            placeholder="Naziv sektora"
+            th:value="${naziv}"
+          />
+        </div>
+
+        <div>
+          <label>Dvorana</label>
+
+          <select name="dvoranaId">
+            <option value="">-- Sve dvorane --</option>
+
+            <option
+              th:each="dvorana : ${dvorane}"
+              th:value="${dvorana.dvoranaId}"
+              th:text="${dvorana.naziv + ', ' + dvorana.lokacija.ulica + ' '
+                    + dvorana.lokacija.kucniBroj + ', '
+                    + dvorana.lokacija.postanskiBroj + ' '
+                    + dvorana.lokacija.mjesto}"
+              th:selected="${dvoranaId == dvorana.dvoranaId}"
+            ></option>
+          </select>
+        </div>
+
+        <div>
+          <button type="submit">Pretraži</button>
+        </div>
+      </form>
+
+      <div
+        th:each="dvorana : ${dvorane}"
+        th:if="${#lists.contains(
+        sektori.![dvorana.dvoranaId],
+        dvorana.dvoranaId
+    )}"
+      >
+        <h2
+          th:text="${dvorana.naziv + ', '
+            + dvorana.lokacija.ulica + ' '
+            + dvorana.lokacija.kucniBroj + ', '
+            + dvorana.lokacija.postanskiBroj + ' '
+            + dvorana.lokacija.mjesto}"
+        ></h2>
+
+        <table>
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Naziv</th>
+              <th>Kapacitet</th>
+              <th>Akcije</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            <tr
+              th:each="sektor : ${sektori}"
+              th:if="${sektor.dvorana.dvoranaId == dvorana.dvoranaId}"
+            >
+              <td th:text="${sektor.sektorId}"></td>
+
+              <td th:text="${sektor.naziv}" id="naziv"></td>
+
+              <td th:text="${sektor.kapacitet}"></td>
+
+              <td>
+                <div class="actions">
+                  <a
+                    class="btn"
+                    th:href="@{/sektori/edit/{id}(id=${sektor.sektorId})}"
+                  >
+                    Uredi
+                  </a>
+
+                  <form
+                    th:action="@{/sektori/delete/{id}(id=${sektor.sektorId})}"
+                    method="post"
+                    onsubmit="return confirm('Jeste li sigurni?');"
+                  >
+                    <button type="submit" id="deletebtn">Obriši</button>
+                  </form>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+
+        <br /><br />
+      </div>
+    </div>
+  </body>
+</html>
