@@ -34,7 +34,12 @@
         <div>
           <label>Naziv</label>
 
-          <input type="text" name="naziv" placeholder="Naziv događaja" th:value="${naziv}"/>
+          <input
+            type="text"
+            name="naziv"
+            placeholder="Naziv događaja"
+            th:value="${naziv}"
+          />
         </div>
 
         <div>
@@ -65,7 +70,7 @@
           <tr th:each="dogadaj : ${dogadaji}">
             <td th:text="${dogadaj.dogadajId}"></td>
 
-            <td th:text="${dogadaj.naziv}"  id="naziv"></td>
+            <td th:text="${dogadaj.naziv}" id="naziv"></td>
 
             <td th:text="${dogadaj.kategorija}"></td>
 
