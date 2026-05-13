@@ -82,14 +82,23 @@ public class DogadajController {
 			BindingResult bindingResult, Model model, RedirectAttributes redirectAttributes) {
 
 		if (bindingResult.hasErrors()) {
+			model.addAttribute("dogadaj", dogadajService.getFormDtoById(id));
 			model.addAttribute("dvorane", dvoranaService.findAll());
 			return "dogadaji/form";
 		}
 
-		dogadajService.update(id, dto);
-		redirectAttributes.addFlashAttribute("successMessage", "Događaj je uspješno ažuriran.");
+		try {
+			dogadajService.update(id, dto);
+			redirectAttributes.addFlashAttribute("successMessage", "Događaj je uspješno ažuriran.");
+			return "redirect:/dogadaji";
 
-		return "redirect:/dogadaji/{id}";
+		} catch (IllegalArgumentException e) {
+			dto.setDogadajId(id);
+			model.addAttribute("dogadaj", dto);
+			model.addAttribute("dvorane", dvoranaService.findAll());
+			model.addAttribute("errorMessage", e.getMessage());
+			return "dogadaji/form";
+		}
 	}
 
 	@PostMapping("/delete/{id}")

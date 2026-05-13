@@ -13,6 +13,8 @@ import hr.fer.zpr.infsus.spu_backend.model.Dvorana;
 import hr.fer.zpr.infsus.spu_backend.model.dto.DogadajFormDto;
 import hr.fer.zpr.infsus.spu_backend.repository.DogadajRepository;
 import hr.fer.zpr.infsus.spu_backend.repository.DvoranaRepository;
+import hr.fer.zpr.infsus.spu_backend.repository.RezervacijaRepository;
+import hr.fer.zpr.infsus.spu_backend.repository.UlaznicaRepository;
 import hr.fer.zpr.infsus.spu_backend.service.DogadajService;
 
 @Service
@@ -21,6 +23,8 @@ public class DogadajServiceImpl implements DogadajService {
 
 	private final DogadajRepository dogadajRepository;
 	private final DvoranaRepository dvoranaRepository;
+	private final UlaznicaRepository ulaznicaRepository;
+	private final RezervacijaRepository rezervacijaRepository;
 
 	@Override
 	public List<Dogadaj> findAll() {
@@ -86,6 +90,19 @@ public class DogadajServiceImpl implements DogadajService {
 		dogadaj.setKategorija(dto.getKategorija());
 		dogadaj.setOpis(dto.getOpis());
 		dogadaj.setDatumVrijemeOdrzavanja(dto.getDatumVrijemeOdrzavanja());
+
+		boolean mijenjaDvoranu = !dogadaj.getDvorana().getDvoranaId().equals(dto.getDvoranaId());
+
+		boolean postojeUlaznice = ulaznicaRepository.existsByDogadaj_DogadajId(id);
+
+		boolean postojeRezervacije = rezervacijaRepository.existsByDogadaj_DogadajId(id);
+
+		if (mijenjaDvoranu && (postojeUlaznice || postojeRezervacije)) {
+
+			throw new IllegalArgumentException(
+					"Dvoranu nije moguće promijeniti " + "jer postoje prodane ulaznice ili rezervacije.");
+		}
+
 		dogadaj.setDvorana(dvorana);
 
 		return dogadajRepository.save(dogadaj);

@@ -8,14 +8,13 @@ import java.util.List;
 
 public interface RezervacijaRepository extends JpaRepository<Rezervacija, Long> {
 
-    boolean existsByDogadaj_DogadajIdAndSjedalo_SjedaloIdAndDatumVrijemeIstekaAfter(
-            Long dogadajId, Long sjedaloId, LocalDateTime datumVrijeme
-    );
+	boolean existsByDogadaj_DogadajIdAndSjedalo_SjedaloIdAndDatumVrijemeIstekaAfter(Long dogadajId, Long sjedaloId,
+			LocalDateTime datumVrijeme);
 
-    List<Rezervacija> findAllByKupac_KorisnikIdAndDatumVrijemeIstekaAfter(
-            Long kupacId, LocalDateTime datumVrijeme
-    );
+	List<Rezervacija> findAllByKupac_KorisnikIdAndDatumVrijemeIstekaAfter(Long kupacId, LocalDateTime datumVrijeme);
 
-    void deleteAllByDatumVrijemeIstekaBefore(LocalDateTime datumVrijeme);
+	void deleteAllByDatumVrijemeIstekaBefore(LocalDateTime datumVrijeme);
+
+	boolean existsByDogadaj_DogadajId(Long dogadajId);
 
 }

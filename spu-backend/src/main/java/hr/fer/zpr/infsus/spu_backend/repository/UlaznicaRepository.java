@@ -19,7 +19,9 @@ public interface UlaznicaRepository extends JpaRepository<Ulaznica, Long> {
 	long countByDogadaj_DogadajIdAndSjedalo_Sektor_SektorId(Long dogadajId, Long sektorId);
 
 	boolean existsByDogadaj_DogadajIdAndSjedalo_Sektor_SektorId(Long dogadajId, Long sektorId);
-	
+
 	boolean existsBySjedalo_Sektor_SektorId(Long sektorId);
+
+	boolean existsByDogadaj_DogadajId(Long dogadajId);
 
 }
