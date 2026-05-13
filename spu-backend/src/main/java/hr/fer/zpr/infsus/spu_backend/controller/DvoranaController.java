@@ -1,5 +1,6 @@
 package hr.fer.zpr.infsus.spu_backend.controller;
 
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -88,7 +89,7 @@ public class DvoranaController {
 		try {
 			dvoranaService.deleteById(id);
 			redirectAttributes.addFlashAttribute("successMessage", "Dvorana je uspješno obrisana.");
-		} catch (IllegalArgumentException e) {
+		} catch (DataIntegrityViolationException | IllegalArgumentException e) {
 			redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
 		}
 
