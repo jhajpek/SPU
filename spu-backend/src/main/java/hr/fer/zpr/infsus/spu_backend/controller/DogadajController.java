@@ -12,11 +12,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import hr.fer.zpr.infsus.spu_backend.model.Dogadaj;
+import hr.fer.zpr.infsus.spu_backend.model.dto.CjenikFormDto;
 import hr.fer.zpr.infsus.spu_backend.model.dto.DogadajFormDto;
 import hr.fer.zpr.infsus.spu_backend.service.CjenikService;
 import hr.fer.zpr.infsus.spu_backend.service.DogadajService;
 import hr.fer.zpr.infsus.spu_backend.service.DvoranaService;
-import hr.fer.zpr.infsus.spu_backend.service.SektorService;
 import hr.fer.zpr.infsus.spu_backend.service.UlaznicaService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -30,7 +30,6 @@ public class DogadajController {
 	private final DvoranaService dvoranaService;
 	private final CjenikService cjenikService;
 	private final UlaznicaService ulaznicaService;
-	private final SektorService sektorService;
 
 	@GetMapping
 	public String findAll(@RequestParam(required = false) String naziv,
@@ -44,15 +43,11 @@ public class DogadajController {
 	}
 
 	@GetMapping("/new")
-	public String createForm(@RequestParam(required = false) Long dvoranaId, Model model) {
+	public String createForm(Model model) {
 
 		DogadajFormDto dto = new DogadajFormDto();
-		dto.setDvoranaId(dvoranaId);
 		model.addAttribute("dogadaj", dto);
 		model.addAttribute("dvorane", dvoranaService.findAll());
-		if (dvoranaId != null) {
-			model.addAttribute("sektori", sektorService.findByDvorana(dvoranaId));
-		}
 
 		return "dogadaji/form";
 	}
@@ -63,9 +58,6 @@ public class DogadajController {
 
 		if (bindingResult.hasErrors()) {
 			model.addAttribute("dvorane", dvoranaService.findAll());
-			if (dto.getDvoranaId() != null) {
-				model.addAttribute("sektori", sektorService.findByDvorana(dto.getDvoranaId()));
-			}
 
 			return "dogadaji/form";
 		}
@@ -79,10 +71,8 @@ public class DogadajController {
 	@GetMapping("/edit/{id}")
 	public String editForm(@PathVariable Long id, Model model) {
 
-		DogadajFormDto dto = dogadajService.getFormDtoById(id);
-		model.addAttribute("dogadaj", dto);
+		model.addAttribute("dogadaj", dogadajService.getFormDtoById(id));
 		model.addAttribute("dvorane", dvoranaService.findAll());
-		model.addAttribute("sektori", sektorService.findByDvorana(dto.getDvoranaId()));
 
 		return "dogadaji/form";
 	}
@@ -93,14 +83,13 @@ public class DogadajController {
 
 		if (bindingResult.hasErrors()) {
 			model.addAttribute("dvorane", dvoranaService.findAll());
-			model.addAttribute("sektori", sektorService.findByDvorana(dto.getDvoranaId()));
 			return "dogadaji/form";
 		}
 
 		dogadajService.update(id, dto);
 		redirectAttributes.addFlashAttribute("successMessage", "Događaj je uspješno ažuriran.");
 
-		return "redirect:/dogadaji";
+		return "redirect:/dogadaji/{id}";
 	}
 
 	@PostMapping("/delete/{id}")
@@ -124,6 +113,12 @@ public class DogadajController {
 		model.addAttribute("dogadaj", dogadaj);
 		model.addAttribute("cjenici", cjenikService.findByDogadaj(id));
 		model.addAttribute("prodaneUlaznice", ulaznicaService.getSoldTicketsBySektor(id));
+		model.addAttribute("dostupniSektori", cjenikService.findAvailableSectors(id));
+		CjenikFormDto noviCjenik = new CjenikFormDto();
+
+		noviCjenik.setDogadajId(id);
+
+		model.addAttribute("noviCjenik", noviCjenik);
 
 		return "dogadaji/detail";
 	}

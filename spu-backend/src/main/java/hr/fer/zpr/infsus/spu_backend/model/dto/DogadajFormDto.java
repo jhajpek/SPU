@@ -1,10 +1,6 @@
 package hr.fer.zpr.infsus.spu_backend.model.dto;
 
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.HashMap;
-import java.util.Map;
-
 import org.springframework.format.annotation.DateTimeFormat;
 
 import jakarta.validation.constraints.Future;
@@ -41,6 +37,4 @@ public class DogadajFormDto {
 	@NotNull
 	private Long dvoranaId;
 
-	@NotNull
-	private Map<Long, BigDecimal> cijenePoSektorima = new HashMap<>();
 }

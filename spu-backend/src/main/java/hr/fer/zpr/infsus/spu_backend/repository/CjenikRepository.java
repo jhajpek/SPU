@@ -8,8 +8,10 @@ import java.util.Optional;
 
 public interface CjenikRepository extends JpaRepository<Cjenik, Long> {
 
-    Optional<Cjenik> findByDogadaj_DogadajIdAndSektor_SektorId(Long dogadajId, Long sektorId);
+	Optional<Cjenik> findByDogadaj_DogadajIdAndSektor_SektorId(Long dogadajId, Long sektorId);
 
-    List<Cjenik> findAllByDogadaj_DogadajIdOrderByCijena(Long dogadajId);
+	List<Cjenik> findAllByDogadaj_DogadajIdOrderByCijena(Long dogadajId);
+
+	boolean existsByDogadaj_DogadajIdAndSektor_SektorId(Long dogadajId, Long sektorId);
 
 }

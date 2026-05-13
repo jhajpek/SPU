@@ -8,7 +8,6 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
-import hr.fer.zpr.infsus.spu_backend.model.Cjenik;
 import hr.fer.zpr.infsus.spu_backend.model.Dogadaj;
 import hr.fer.zpr.infsus.spu_backend.model.Dvorana;
 import hr.fer.zpr.infsus.spu_backend.model.dto.DogadajFormDto;
@@ -128,11 +127,6 @@ public class DogadajServiceImpl implements DogadajService {
 		dto.setDatumVrijemeOdrzavanja(dogadaj.getDatumVrijemeOdrzavanja());
 
 		dto.setDvoranaId(dogadaj.getDvorana().getDvoranaId());
-
-		for (Cjenik cjenik : dogadaj.getCjenici()) {
-
-			dto.getCijenePoSektorima().put(cjenik.getSektor().getSektorId(), cjenik.getCijena());
-		}
 
 		return dto;
 	}

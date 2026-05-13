@@ -26,25 +26,6 @@
             : 'Dodavanje događaja'"
       ></h2>
 
-      <form method="get" th:action="@{/dogadaji/new}">
-        <div>
-          <label>Dvorana</label>
-
-          <select name="dvoranaId" onchange="this.form.submit()">
-            <option value="">-- Odaberi dvoranu --</option>
-
-            <option
-              th:each="dvorana : ${dvorane}"
-              th:value="${dvorana.dvoranaId}"
-              th:text="${dvorana.naziv}"
-              th:selected="${dogadaj.dvoranaId == dvorana.dvoranaId}"
-            ></option>
-          </select>
-        </div>
-      </form>
-
-      <br />
-
       <form
         th:action="${dogadaj.dogadajId} != null
       ? @{/dogadaji/edit/{id}(id=${dogadaj.dogadajId})}
@@ -52,7 +33,28 @@
         th:object="${dogadaj}"
         method="post"
       >
-        <input type="hidden" th:field="*{dvoranaId}" />
+        <div>
+          <label>Dvorana</label>
+
+          <select th:field="*{dvoranaId}">
+            <option value="">-- Odaberi dvoranu --</option>
+
+            <option
+              th:each="dvorana : ${dvorane}"
+              th:value="${dvorana.dvoranaId}"
+              th:text="${dvorana.naziv}"
+            ></option>
+          </select>
+
+          <span
+            class="error"
+            th:if="${#fields.hasErrors('dvoranaId')}"
+            th:errors="*{dvoranaId}"
+          >
+          </span>
+        </div>
+
+        <br />
 
         <div>
           <label>Naziv</label>
@@ -107,33 +109,12 @@
           </span>
         </div>
 
-        <div th:if="${sektori != null}">
-          <br /><br />
-          <h3>Cjenik po sektorima</h3>
-          <br />
-
-          <div th:each="sektor : ${sektori}">
-            <label>
-              <span th:text="${sektor.naziv}"></span>
-            </label>
-
-            <input
-              type="number"
-              step="0.01"
-              min="0"
-              required
-              th:name="|cijenePoSektorima[${sektor.sektorId}]|"
-              th:value="${dogadaj.cijenePoSektorima[sektor.sektorId]}"
-            />
-          </div>
-        </div>
-
         <br />
 
         <div class="actions">
           <button type="submit">Spremi</button>
 
-          <a class="btn" th:href="@{/dogadaji}"> Odustani </a>
+          <a class="btn" th:href="@{/dogadaji/{id}(id=${dogadaj.dogadajId})}"> Odustani </a>
         </div>
       </form>
     </div>
