@@ -75,10 +75,23 @@ public class SektorController {
 			return "sektori/form";
 		}
 
-		sektorService.update(id, dto);
-		redirectAttributes.addFlashAttribute("successMessage", "Sektor je uspješno ažuriran.");
+		try {
 
-		return "redirect:/sektori";
+			sektorService.update(id, dto);
+
+			redirectAttributes.addFlashAttribute("successMessage", "Sektor je uspješno ažuriran.");
+
+			return "redirect:/sektori";
+
+		} catch (IllegalArgumentException e) {
+
+			model.addAttribute("dvorane", dvoranaService.findAll());
+
+			model.addAttribute("errorMessage", e.getMessage());
+
+			return "sektori/form";
+		}
+
 	}
 
 	@PostMapping("/delete/{id}")
@@ -90,7 +103,7 @@ public class SektorController {
 		} catch (IllegalArgumentException e) {
 			redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
 		}
-		
+
 		return "redirect:/sektori";
 	}
 }

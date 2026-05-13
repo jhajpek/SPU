@@ -14,4 +14,6 @@ public interface CjenikRepository extends JpaRepository<Cjenik, Long> {
 
 	boolean existsByDogadaj_DogadajIdAndSektor_SektorId(Long dogadajId, Long sektorId);
 
+	boolean existsBySektor_SektorId(Long sektorId);
+
 }

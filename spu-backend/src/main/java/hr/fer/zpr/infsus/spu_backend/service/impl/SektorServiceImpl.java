@@ -8,8 +8,10 @@ import org.springframework.stereotype.Service;
 import hr.fer.zpr.infsus.spu_backend.model.Dvorana;
 import hr.fer.zpr.infsus.spu_backend.model.Sektor;
 import hr.fer.zpr.infsus.spu_backend.model.dto.SektorFormDto;
+import hr.fer.zpr.infsus.spu_backend.repository.CjenikRepository;
 import hr.fer.zpr.infsus.spu_backend.repository.DvoranaRepository;
 import hr.fer.zpr.infsus.spu_backend.repository.SektorRepository;
+import hr.fer.zpr.infsus.spu_backend.repository.UlaznicaRepository;
 import hr.fer.zpr.infsus.spu_backend.service.SektorService;
 import lombok.RequiredArgsConstructor;
 
@@ -19,6 +21,8 @@ public class SektorServiceImpl implements SektorService {
 
 	private final SektorRepository sektorRepository;
 	private final DvoranaRepository dvoranaRepository;
+	private final CjenikRepository cjenikRepository;
+	private final UlaznicaRepository ulaznicaRepository;
 
 	@Override
 	public List<Sektor> findAll() {
@@ -69,6 +73,16 @@ public class SektorServiceImpl implements SektorService {
 
 		sektor.setNaziv(dto.getNaziv());
 		sektor.setKapacitet(dto.getKapacitet());
+		boolean koristiSeUCjeniku = cjenikRepository.existsBySektor_SektorId(id);
+
+		boolean postojeUlaznice = ulaznicaRepository.existsBySjedalo_Sektor_SektorId(id);
+
+		boolean mijenjaDvoranu = !sektor.getDvorana().getDvoranaId().equals(dto.getDvoranaId());
+
+		if (mijenjaDvoranu && (koristiSeUCjeniku || postojeUlaznice)) {
+
+			throw new IllegalArgumentException("Dvoranu nije moguće promijeniti " + "jer je sektor već korišten.");
+		}
 		sektor.setDvorana(dvorana);
 
 		return sektorRepository.save(sektor);
