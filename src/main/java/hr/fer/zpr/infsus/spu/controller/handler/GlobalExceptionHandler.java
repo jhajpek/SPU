@@ -32,5 +32,9 @@ public class GlobalExceptionHandler {
 		return "error/error";
 	}
 
-
+	@ExceptionHandler(Exception.class)
+	public String handleGeneralException(Exception ex, Model model) {
+		model.addAttribute("errorMessage", "Dogodila se pogreška na poslužitelju.");
+		return "error/error";
+	}
 }
