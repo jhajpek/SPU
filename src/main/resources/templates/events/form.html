@@ -1,0 +1,132 @@
+<!doctype html>
+<html lang="hr" xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8" />
+
+    <title>Sustav za prodaju ulaznica</title>
+
+    <link rel="stylesheet" th:href="@{/css/style.css}" />
+  </head>
+
+  <body>
+    <div class="container">
+      <div class="top-bar">
+        <h1>Sustav za prodaju ulaznica</h1>
+
+        <div class="actions">
+          <a class="btn" th:href="@{/templates/events}"> Događaji </a>
+
+          <a class="btn" th:href="@{/templates/halls}"> Dvorane </a>
+        </div>
+      </div>
+
+      <h2
+        th:text="${dogadaj.dogadajId} != null
+            ? 'Uređivanje događaja'
+            : 'Dodavanje događaja'"
+      ></h2>
+
+      <div th:if="${successMessage}" class="success">
+        <span th:text="${successMessage}"></span>
+      </div>
+
+      <div th:if="${errorMessage}" class="error">
+        <span th:text="${errorMessage}"></span>
+      </div>
+
+      <form
+        th:action="${dogadaj.dogadajId} != null
+      ? @{/dogadaji/edit/{id}(id=${dogadaj.dogadajId})}
+      : @{/dogadaji}"
+        th:object="${dogadaj}"
+        method="post"
+      >
+        <div>
+          <label>Dvorana</label>
+
+          <select th:field="*{dvoranaId}">
+            <option value="">-- Odaberi dvoranu --</option>
+
+            <option
+              th:each="dvorana : ${dvorane}"
+              th:value="${dvorana.dvoranaId}"
+              th:text="${dvorana.naziv}"
+            ></option>
+          </select>
+
+          <span
+            class="error"
+            th:if="${#fields.hasErrors('dvoranaId')}"
+            th:errors="*{dvoranaId}"
+          >
+          </span>
+        </div>
+
+        <br />
+
+        <div>
+          <label>Naziv</label>
+
+          <input
+            type="text"
+            th:field="*{naziv}"
+            placeholder="Unesite naziv događaja"
+          />
+
+          <span
+            class="error"
+            th:if="${#fields.hasErrors('naziv')}"
+            th:errors="*{naziv}"
+          >
+          </span>
+        </div>
+
+        <div>
+          <label>Kategorija</label>
+
+          <input
+            type="text"
+            th:field="*{kategorija}"
+            placeholder="Npr. koncert, sport, festival"
+          />
+
+          <span
+            class="error"
+            th:if="${#fields.hasErrors('kategorija')}"
+            th:errors="*{kategorija}"
+          >
+          </span>
+        </div>
+
+        <div>
+          <label>Opis</label>
+
+          <textarea th:field="*{opis}" placeholder="Opis događaja"> </textarea>
+        </div>
+
+        <div>
+          <label>Datum održavanja</label>
+
+          <input type="datetime-local" th:field="*{datumVrijemeOdrzavanja}" />
+
+          <span
+            class="error"
+            th:if="${#fields.hasErrors('datumVrijemeOdrzavanja')}"
+            th:errors="*{datumVrijemeOdrzavanja}"
+          >
+          </span>
+        </div>
+
+        <br />
+
+        <div class="actions">
+          <button type="submit">Spremi</button>
+
+          <a class="btn" th:href="@{/templates/events/{id}(id=${dogadaj.dogadajId})}">
+            Odustani
+          </a>
+        </div>
+      </form>
+    </div>
+  </body>
+</html>
