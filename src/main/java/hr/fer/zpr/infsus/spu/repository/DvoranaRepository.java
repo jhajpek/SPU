@@ -8,17 +8,9 @@ import java.util.List;
 
 public interface DvoranaRepository extends JpaRepository<Dvorana, Long> {
 
-	List<Dvorana> findAllByNazivContainsIgnoreCase(String naziv);
+	boolean existsByLokacija_LokacijaId(Long lokacijaId);
 
-	List<Dvorana> findAllByNazivContainsIgnoreCaseAndLokacija_Mjesto(String naziv, String mjesto);
-
-	List<Dvorana> findAllByNazivContainsIgnoreCaseAndLokacija_MjestoContainsIgnoreCase(String naziv, String mjesto);
-
-	List<Dvorana> findAllByLokacija_MjestoContainsIgnoreCase(String mjesto);
-
-	boolean existsByNazivIgnoreCaseAndLokacija_LokacijaId(String naziv, Long lokacijaId);
-
-	boolean existsByNazivIgnoreCaseAndLokacija_LokacijaIdAndDvoranaIdNot(String naziv, Long lokacijaId, Long dvoranaId);
+	boolean existsByLokacija_LokacijaIdAndDvoranaIdNot(Long lokacijaId, Long dvoranaId);
 
 	@Query("""
 			    SELECT d

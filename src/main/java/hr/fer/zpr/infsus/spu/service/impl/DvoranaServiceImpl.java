@@ -2,6 +2,8 @@ package hr.fer.zpr.infsus.spu.service.impl;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.InvalidDataAccessApiUsageException;
@@ -19,12 +21,21 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class DvoranaServiceImpl implements DvoranaService {
 
-	private final DvoranaRepository dvoranaRepository;
 	private final LokacijaRepository lokacijaRepository;
+
+	private final DvoranaRepository dvoranaRepository;
 
 	@Override
 	public List<Dvorana> findAll() {
 		return dvoranaRepository.findAll();
+	}
+
+	@Override
+	public List<Lokacija> findAllUnusedLokacijas() {
+		Set<Long> used = dvoranaRepository.findAll().stream().
+				map(d -> d.getLokacija().getLokacijaId()).collect(Collectors.toSet());
+		return lokacijaRepository.findAll().stream().
+				filter(l -> !used.contains(l.getLokacijaId())).toList();
 	}
 
 	@Override
@@ -35,9 +46,9 @@ public class DvoranaServiceImpl implements DvoranaService {
 	@Override
 	public Dvorana save(DvoranaFormDto dto) {
 
-		if (dvoranaRepository.existsByNazivIgnoreCaseAndLokacija_LokacijaId(dto.getNaziv(), dto.getLokacijaId())) {
+		if (dvoranaRepository.existsByLokacija_LokacijaId(dto.getLokacijaId())) {
 
-			throw new IllegalArgumentException("Dvorana s tim nazivom već postoji na odabranoj lokaciji.");
+			throw new IllegalArgumentException("Dvorana već postoji na odabranoj lokaciji.");
 		}
 
 		Lokacija lokacija = lokacijaRepository.findById(dto.getLokacijaId())
@@ -52,10 +63,9 @@ public class DvoranaServiceImpl implements DvoranaService {
 	@Override
 	public Dvorana update(Long id, DvoranaFormDto dto) {
 
-		if (dvoranaRepository.existsByNazivIgnoreCaseAndLokacija_LokacijaIdAndDvoranaIdNot(dto.getNaziv(),
-				dto.getLokacijaId(), id)) {
+		if (dvoranaRepository.existsByLokacija_LokacijaIdAndDvoranaIdNot(dto.getLokacijaId(), id)) {
 
-			throw new IllegalArgumentException("Dvorana s tim nazivom već postoji na odabranoj lokaciji.");
+			throw new IllegalArgumentException("Dvorana već postoji na odabranoj lokaciji.");
 		}
 
 		Dvorana dvorana = dvoranaRepository.findById(id)

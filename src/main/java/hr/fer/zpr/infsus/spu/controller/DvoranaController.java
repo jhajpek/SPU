@@ -13,7 +13,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import hr.fer.zpr.infsus.spu.dto.DvoranaFormDto;
 import hr.fer.zpr.infsus.spu.service.DvoranaService;
-import hr.fer.zpr.infsus.spu.service.LokacijaService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
@@ -23,7 +22,6 @@ import lombok.RequiredArgsConstructor;
 public class DvoranaController {
 
 	private final DvoranaService dvoranaService;
-	private final LokacijaService lokacijaService;
 
 	@GetMapping
 	public String findAll(@RequestParam(required = false) String query, Model model) {
@@ -37,7 +35,7 @@ public class DvoranaController {
 	public String createForm(Model model) {
 
 		model.addAttribute("dvorana", new DvoranaFormDto());
-		model.addAttribute("lokacije", lokacijaService.findAll());
+		model.addAttribute("lokacije", dvoranaService.findAllUnusedLokacijas());
 		return "halls/form";
 	}
 
@@ -46,7 +44,7 @@ public class DvoranaController {
 			RedirectAttributes redirectAttributes) {
 
 		if (bindingResult.hasErrors()) {
-			model.addAttribute("lokacije", lokacijaService.findAll());
+			model.addAttribute("lokacije", dvoranaService.findAllUnusedLokacijas());
 			return "halls/form";
 		}
 
@@ -59,7 +57,7 @@ public class DvoranaController {
 	public String editForm(@PathVariable Long id, Model model) {
 
 		model.addAttribute("dvorana", dvoranaService.getFormDtoById(id));
-		model.addAttribute("lokacije", lokacijaService.findAll());
+		model.addAttribute("lokacije", dvoranaService.findAllUnusedLokacijas());
 		return "halls/form";
 	}
 
@@ -68,7 +66,7 @@ public class DvoranaController {
 			BindingResult bindingResult, Model model, RedirectAttributes redirectAttributes) {
 
 		if (bindingResult.hasErrors()) {
-			model.addAttribute("lokacije", lokacijaService.findAll());
+			model.addAttribute("lokacije", dvoranaService.findAllUnusedLokacijas());
 			return "halls/form";
 		}
 

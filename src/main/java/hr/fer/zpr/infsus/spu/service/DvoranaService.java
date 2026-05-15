@@ -5,10 +5,13 @@ import java.util.Optional;
 
 import hr.fer.zpr.infsus.spu.model.Dvorana;
 import hr.fer.zpr.infsus.spu.dto.DvoranaFormDto;
+import hr.fer.zpr.infsus.spu.model.Lokacija;
 
 public interface DvoranaService {
 
 	List<Dvorana> findAll();
+
+	List<Lokacija> findAllUnusedLokacijas();
 
 	Optional<Dvorana> findById(Long id);
 

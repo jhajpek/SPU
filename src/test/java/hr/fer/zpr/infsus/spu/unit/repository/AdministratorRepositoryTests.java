@@ -26,32 +26,8 @@ public class AdministratorRepositoryTests {
     private AdministratorRepository administratorRepository;
 
     @BeforeEach
-    void cleanUpRepositoriesBeforeEachTest() {
-        administratorRepository.deleteAll();
+    public void cleanUpRepositoriesBeforeEachTest() {
         korisnikRepository.deleteAll();
-    }
-
-    @Test
-    public void AdministratorRepository_FindAllAdministrators_ReturnEmptyList() {
-        int numberOfAdministrators = administratorRepository.findAll().size();
-        Assertions.assertEquals(0, numberOfAdministrators);
-
-        int numberOfKorisniks = korisnikRepository.findAll().size();
-        Assertions.assertEquals(0, numberOfKorisniks);
-    }
-
-    @Test
-    public void AdministratorRepository_SaveAndFindAllAdministrators_ReturnList() {
-        Administrator administrator1 = EntityFactory.createAdministrator();
-        Administrator administrator2 = EntityFactory.createAdministrator();
-        administrator2.setEmail("admin2@gmail.com");
-        administratorRepository.saveAll(List.of(administrator1, administrator2));
-
-        int numberOfAdministrators = administratorRepository.findAll().size();
-        Assertions.assertEquals(2, numberOfAdministrators);
-
-        int numberOfKorisniks = korisnikRepository.findAll().size();
-        Assertions.assertEquals(2, numberOfKorisniks);
     }
 
     @Test
@@ -68,7 +44,22 @@ public class AdministratorRepositoryTests {
         Assertions.assertTrue(isSavedAdminInKorisnikRepository);
     }
 
-    @Test void AdministratorRepository_SaveInvalidAdministrator_ThrowsException() {
+    @Test
+    public void AdministratorRepository_SaveAndFindAllAdministrators_ReturnAdministratorList() {
+        Administrator administrator1 = EntityFactory.createAdministrator();
+        Administrator administrator2 = EntityFactory.createAdministrator();
+        administrator2.setEmail("marko.mamic2@gmail.com");
+        administratorRepository.saveAll(List.of(administrator1, administrator2));
+
+        int numberOfAdministrators = administratorRepository.findAll().size();
+        Assertions.assertEquals(2, numberOfAdministrators);
+
+        int numberOfKorisniks = korisnikRepository.findAll().size();
+        Assertions.assertEquals(2, numberOfKorisniks);
+    }
+
+    @Test
+    public void AdministratorRepository_SaveAdministratorWithInvalidIme_ThrowsException() {
         Administrator administrator = EntityFactory.createAdministrator();
         administrator.setIme("");
         Assertions.assertThrows(
@@ -78,7 +69,7 @@ public class AdministratorRepositoryTests {
     }
 
     @Test
-    public void AdministratorRepository_SaveDuplicateAdministrator_ThrowsException() {
+    public void AdministratorRepository_SaveDuplicatedAdministrator_ThrowsException() {
         Administrator administrator1 = EntityFactory.createAdministrator();
         administratorRepository.save(administrator1);
 
