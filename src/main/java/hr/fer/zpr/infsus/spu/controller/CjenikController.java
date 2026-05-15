@@ -25,7 +25,6 @@ public class CjenikController {
 			RedirectAttributes redirectAttributes) {
 
 		if (bindingResult.hasErrors()) {
-			System.out.println(bindingResult.getAllErrors());
 			redirectAttributes.addFlashAttribute("errorMessage", "Neispravni podaci za cjenik.");
 			return "redirect:/dogadaji/" + dto.getDogadajId();
 		}
