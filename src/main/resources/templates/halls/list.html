@@ -1,118 +1,118 @@
 <!doctype html>
 <html lang="hr" xmlns:th="http://www.thymeleaf.org">
-  <head>
-    <meta charset="UTF-8" />
+<head>
+  <meta charset="UTF-8" />
 
-    <title>Sustav za prodaju ulaznica</title>
+  <title>Sustav za prodaju ulaznica</title>
 
-    <link rel="stylesheet" th:href="@{/css/style.css}" />
-  </head>
+  <link rel="stylesheet" th:href="@{/css/style.css}" />
+</head>
 
-  <body>
-    <div class="container">
-      <div class="top-bar">
-        <h1>Sustav za prodaju ulaznica</h1>
+<body>
+<div class="container">
+  <div class="top-bar">
+    <h1>Sustav za prodaju ulaznica</h1>
 
-        <div class="actions">
-          <a class="btn" th:href="@{/templates/events}"> Događaji </a>
+    <div class="actions">
+      <a class="btn" th:href="@{/dogadaji}"> Događaji </a>
 
-          <a class="btn" th:href="@{/templates/sectors}"> Sektori </a>
+      <a class="btn" th:href="@{/sektori}"> Sektori </a>
 
-          <a class="btn" th:href="@{/templates/halls/new}" id="addbtn">
-            Dodaj dvoranu
-          </a>
-        </div>
-      </div>
+      <a class="btn" th:href="@{/dvorane/new}" id="addbtn">
+        Dodaj dvoranu
+      </a>
+    </div>
+  </div>
 
-      <h2>Popis dvorana</h2>
+  <h2>Popis dvorana</h2>
 
-      <div th:if="${successMessage}" class="success">
-        <span th:text="${successMessage}"></span>
-      </div>
+  <div th:if="${successMessage}" class="success">
+    <span th:text="${successMessage}"></span>
+  </div>
 
-      <div th:if="${errorMessage}" class="error">
-        <span th:text="${errorMessage}"></span>
-      </div>
+  <div th:if="${errorMessage}" class="error">
+    <span th:text="${errorMessage}"></span>
+  </div>
 
-      <form class="search-form" method="get" th:action="@{/templates/halls}">
-        <div>
-          <label>Naziv</label>
-          <input
-            type="text"
-            name="naziv"
-            placeholder="Naziv dvorane"
-            th:value="${naziv}"
-          />
-        </div>
-        <div>
-          <label>Lokacija</label>
-          <input
-            type="text"
-            name="query"
-            placeholder="Lokacija"
-            th:value="${query}"
-          />
-        </div>
-        <div>
-          <button type="submit">Pretraži</button>
-        </div>
-      </form>
+  <form class="search-form" method="get" th:action="@{/dvorane}">
+    <div>
+      <label>Naziv</label>
+      <input
+              type="text"
+              name="naziv"
+              placeholder="Naziv dvorane"
+              th:value="${naziv}"
+      />
+    </div>
+    <div>
+      <label>Lokacija</label>
+      <input
+              type="text"
+              name="query"
+              placeholder="Lokacija"
+              th:value="${query}"
+      />
+    </div>
+    <div>
+      <button type="submit">Pretraži</button>
+    </div>
+  </form>
 
-      <br />
+  <br />
 
-      <table>
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>Naziv</th>
-            <th>Lokacija</th>
-            <th>Sektori</th>
-            <th>Akcije</th>
-          </tr>
-        </thead>
+  <table>
+    <thead>
+    <tr>
+      <th>ID</th>
+      <th>Naziv</th>
+      <th>Lokacija</th>
+      <th>Sektori</th>
+      <th>Akcije</th>
+    </tr>
+    </thead>
 
-        <tbody>
-          <tr th:each="dvorana : ${dvorane}">
-            <td th:text="${dvorana.dvoranaId}"></td>
+    <tbody>
+    <tr th:each="dvorana : ${dvorane}">
+      <td th:text="${dvorana.dvoranaId}"></td>
 
-            <td th:text="${dvorana.naziv}" id="naziv"></td>
+      <td th:text="${dvorana.naziv}" id="naziv"></td>
 
-            <td
+      <td
               th:text="${dvorana.lokacija.ulica + ' '
                     + dvorana.lokacija.kucniBroj + ', '
                     + dvorana.lokacija.postanskiBroj + ' '
                     + dvorana.lokacija.mjesto}"
-            ></td>
+      ></td>
 
-            <td>
+      <td>
               <span th:each="sektor, iter : ${dvorana.sektori}">
                 <span th:text="${sektor.naziv}"></span>
 
                 <span th:if="${!iter.last}">, </span>
               </span>
-            </td>
+      </td>
 
-            <td>
-              <div class="actions">
-                <a
+      <td>
+        <div class="actions">
+          <a
                   class="btn"
-                  th:href="@{/templates/halls/edit/{id}(id=${dvorana.dvoranaId})}"
-                >
-                  Uredi
-                </a>
+                  th:href="@{/dvorane/edit/{id}(id=${dvorana.dvoranaId})}"
+          >
+            Uredi
+          </a>
 
-                <form
-                  th:action="@{/templates/halls/delete/{id}(id=${dvorana.dvoranaId})}"
+          <form
+                  th:action="@{/dvorane/delete/{id}(id=${dvorana.dvoranaId})}"
                   method="post"
                   onsubmit="return confirm('Jeste li sigurni?');"
-                >
-                  <button type="submit" id="deletebtn">Obriši</button>
-                </form>
-              </div>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-  </body>
+          >
+            <button type="submit" id="deletebtn">Obriši</button>
+          </form>
+        </div>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+</div>
+</body>
 </html>

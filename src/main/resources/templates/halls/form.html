@@ -1,87 +1,87 @@
 <!doctype html>
 <html lang="hr" xmlns:th="http://www.thymeleaf.org">
-  <head>
-    <meta charset="UTF-8" />
+<head>
+  <meta charset="UTF-8" />
 
-    <title>Sustav za prodaju ulaznica</title>
+  <title>Sustav za prodaju ulaznica</title>
 
-    <link rel="stylesheet" th:href="@{/css/style.css}" />
-  </head>
+  <link rel="stylesheet" th:href="@{/css/style.css}" />
+</head>
 
-  <body>
-    <div class="container">
-      <div class="top-bar">
-        <h1>Sustav za prodaju ulaznica</h1>
+<body>
+<div class="container">
+  <div class="top-bar">
+    <h1>Sustav za prodaju ulaznica</h1>
 
-        <div class="actions">
-          <a class="btn" th:href="@{/templates/events}"> Događaji </a>
+    <div class="actions">
+      <a class="btn" th:href="@{/dogadaji}"> Događaji </a>
 
-          <a class="btn" th:href="@{/templates/halls}"> Dvorane </a>
-        </div>
-      </div>
+      <a class="btn" th:href="@{/dvorane}"> Dvorane </a>
+    </div>
+  </div>
 
-      <h2
-        th:text="${dvorana.dvoranaId} != null
+  <h2
+          th:text="${dvorana.dvoranaId} != null
             ? 'Uređivanje dvorane'
             : 'Dodavanje dvorane'"
-      ></h2>
+  ></h2>
 
-      <form
-        th:action="${dvorana.dvoranaId} != null
+  <form
+          th:action="${dvorana.dvoranaId} != null
             ? @{/dvorane/edit/{id}(id=${dvorana.dvoranaId})}
             : @{/dvorane}"
-        th:object="${dvorana}"
-        method="post"
+          th:object="${dvorana}"
+          method="post"
+  >
+    <div>
+      <label>Naziv dvorane</label>
+
+      <input
+              type="text"
+              th:field="*{naziv}"
+              placeholder="Unesite naziv dvorane"
+      />
+
+      <span
+              class="error"
+              th:if="${#fields.hasErrors('naziv')}"
+              th:errors="*{naziv}"
       >
-        <div>
-          <label>Naziv dvorane</label>
-
-          <input
-            type="text"
-            th:field="*{naziv}"
-            placeholder="Unesite naziv dvorane"
-          />
-
-          <span
-            class="error"
-            th:if="${#fields.hasErrors('naziv')}"
-            th:errors="*{naziv}"
-          >
           </span>
-        </div>
+    </div>
 
-        <div>
-          <label>Lokacija</label>
+    <div>
+      <label>Lokacija</label>
 
-          <select th:field="*{lokacijaId}">
-            <option value="">-- Odaberi lokaciju --</option>
+      <select th:field="*{lokacijaId}">
+        <option value="">-- Odaberi lokaciju --</option>
 
-            <option
-              th:each="lokacija : ${lokacije}"
-              th:value="${lokacija.lokacijaId}"
-              th:text="${lokacija.ulica + ' '
+        <option
+                th:each="lokacija : ${lokacije}"
+                th:value="${lokacija.lokacijaId}"
+                th:text="${lokacija.ulica + ' '
                                 + lokacija.kucniBroj + ', '
                                 + lokacija.postanskiBroj + ' '
                                 + lokacija.mjesto}"
-            ></option>
-          </select>
+        ></option>
+      </select>
 
-          <span
-            class="error"
-            th:if="${#fields.hasErrors('lokacijaId')}"
-            th:errors="*{lokacijaId}"
-          >
+      <span
+              class="error"
+              th:if="${#fields.hasErrors('lokacijaId')}"
+              th:errors="*{lokacijaId}"
+      >
           </span>
-        </div>
-
-        <br />
-
-        <div class="actions">
-          <button type="submit">Spremi</button>
-
-          <a class="btn" th:href="@{/templates/halls}"> Odustani </a>
-        </div>
-      </form>
     </div>
-  </body>
+
+    <br />
+
+    <div class="actions">
+      <button type="submit">Spremi</button>
+
+      <a class="btn" th:href="@{/dvorane}"> Odustani </a>
+    </div>
+  </form>
+</div>
+</body>
 </html>
