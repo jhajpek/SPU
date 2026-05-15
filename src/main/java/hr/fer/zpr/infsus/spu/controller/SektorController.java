@@ -28,7 +28,6 @@ public class SektorController {
 		model.addAttribute("dvorane", dvoranaService.findAll());
 		model.addAttribute("naziv", naziv);
 		model.addAttribute("dvoranaId", dvoranaId);
-
 		return "sectors/list";
 	}
 
@@ -37,7 +36,6 @@ public class SektorController {
 
 		model.addAttribute("sektor", new SektorFormDto());
 		model.addAttribute("dvorane", dvoranaService.findAll());
-
 		return "sectors/form";
 	}
 
@@ -49,10 +47,8 @@ public class SektorController {
 			model.addAttribute("dvorane", dvoranaService.findAll());
 			return "sectors/form";
 		}
-
 		sektorService.save(dto);
 		redirectAttributes.addFlashAttribute("successMessage", "Sektor je uspješno spremljen.");
-
 		return "redirect:/sektori";
 	}
 
@@ -61,7 +57,6 @@ public class SektorController {
 
 		model.addAttribute("sektor", sektorService.getFormDtoById(id));
 		model.addAttribute("dvorane", dvoranaService.findAll());
-
 		return "sectors/form";
 	}
 
@@ -70,25 +65,18 @@ public class SektorController {
 			BindingResult bindingResult, Model model, RedirectAttributes redirectAttributes) {
 
 		if (bindingResult.hasErrors()) {
-
 			model.addAttribute("dvorane", dvoranaService.findAll());
 			return "sectors/form";
 		}
 
 		try {
-
 			sektorService.update(id, dto);
-
 			redirectAttributes.addFlashAttribute("successMessage", "Sektor je uspješno ažuriran.");
-
 			return "redirect:/sektori";
 
 		} catch (IllegalArgumentException e) {
-
 			model.addAttribute("dvorane", dvoranaService.findAll());
-
 			model.addAttribute("errorMessage", e.getMessage());
-
 			return "sectors/form";
 		}
 
@@ -97,13 +85,8 @@ public class SektorController {
 	@PostMapping("/delete/{id}")
 	public String delete(@PathVariable Long id, RedirectAttributes redirectAttributes) {
 
-		try {
-			sektorService.deleteById(id);
-			redirectAttributes.addFlashAttribute("successMessage", "Sektor je uspješno obrisan.");
-		} catch (IllegalArgumentException e) {
-			redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
-		}
-
+		sektorService.deleteById(id);
+		redirectAttributes.addFlashAttribute("successMessage", "Sektor je uspješno obrisan.");
 		return "redirect:/sektori";
 	}
 

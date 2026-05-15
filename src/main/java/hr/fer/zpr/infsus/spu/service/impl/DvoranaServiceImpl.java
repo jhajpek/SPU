@@ -84,7 +84,6 @@ public class DvoranaServiceImpl implements DvoranaService {
 				.orElseThrow(() -> new IllegalArgumentException("Dvorana ne postoji."));
 
 		DvoranaFormDto dto = new DvoranaFormDto();
-
 		dto.setDvoranaId(dvorana.getDvoranaId());
 		dto.setNaziv(dvorana.getNaziv());
 		dto.setLokacijaId(dvorana.getLokacija().getLokacijaId());

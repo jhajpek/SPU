@@ -10,12 +10,16 @@ import org.springframework.stereotype.Service;
 import lombok.RequiredArgsConstructor;
 import hr.fer.zpr.infsus.spu.model.Dogadaj;
 import hr.fer.zpr.infsus.spu.model.Dvorana;
+import hr.fer.zpr.infsus.spu.dto.CjenikFormDto;
+import hr.fer.zpr.infsus.spu.dto.DogadajDetailsDto;
 import hr.fer.zpr.infsus.spu.dto.DogadajFormDto;
 import hr.fer.zpr.infsus.spu.repository.DogadajRepository;
 import hr.fer.zpr.infsus.spu.repository.DvoranaRepository;
 import hr.fer.zpr.infsus.spu.repository.RezervacijaRepository;
 import hr.fer.zpr.infsus.spu.repository.UlaznicaRepository;
+import hr.fer.zpr.infsus.spu.service.CjenikService;
 import hr.fer.zpr.infsus.spu.service.DogadajService;
+import hr.fer.zpr.infsus.spu.service.UlaznicaService;
 
 @Service
 @RequiredArgsConstructor
@@ -25,6 +29,8 @@ public class DogadajServiceImpl implements DogadajService {
 	private final DvoranaRepository dvoranaRepository;
 	private final UlaznicaRepository ulaznicaRepository;
 	private final RezervacijaRepository rezervacijaRepository;
+	private final CjenikService cjenikService;
+	private final UlaznicaService ulaznicaService;
 
 	@Override
 	public List<Dogadaj> findAll() {
@@ -56,7 +62,6 @@ public class DogadajServiceImpl implements DogadajService {
 		dogadaj.setOpis(dto.getOpis());
 		dogadaj.setDatumVrijemeOdrzavanja(dto.getDatumVrijemeOdrzavanja());
 		dogadaj.setDvorana(dvorana);
-
 		return dogadajRepository.save(dogadaj);
 	}
 
@@ -85,26 +90,20 @@ public class DogadajServiceImpl implements DogadajService {
 		}
 
 		Dvorana dvorana = dvoranaRepository.findById(dto.getDvoranaId()).orElseThrow();
-
 		dogadaj.setNaziv(dto.getNaziv());
 		dogadaj.setKategorija(dto.getKategorija());
 		dogadaj.setOpis(dto.getOpis());
 		dogadaj.setDatumVrijemeOdrzavanja(dto.getDatumVrijemeOdrzavanja());
 
 		boolean mijenjaDvoranu = !dogadaj.getDvorana().getDvoranaId().equals(dto.getDvoranaId());
-
 		boolean postojeUlaznice = ulaznicaRepository.existsByDogadaj_DogadajId(id);
-
 		boolean postojeRezervacije = rezervacijaRepository.existsByDogadaj_DogadajId(id);
-
 		if (mijenjaDvoranu && (postojeUlaznice || postojeRezervacije)) {
-
 			throw new IllegalArgumentException(
 					"Dvoranu nije moguće promijeniti " + "jer postoje prodane ulaznice ili rezervacije.");
 		}
 
 		dogadaj.setDvorana(dvorana);
-
 		return dogadajRepository.save(dogadaj);
 	}
 
@@ -135,16 +134,29 @@ public class DogadajServiceImpl implements DogadajService {
 				.orElseThrow(() -> new IllegalArgumentException("Događaj ne postoji."));
 
 		DogadajFormDto dto = new DogadajFormDto();
-
 		dto.setDogadajId(dogadaj.getDogadajId());
 		dto.setNaziv(dogadaj.getNaziv());
 		dto.setKategorija(dogadaj.getKategorija());
 		dto.setOpis(dogadaj.getOpis());
-
 		dto.setDatumVrijemeOdrzavanja(dogadaj.getDatumVrijemeOdrzavanja());
-
 		dto.setDvoranaId(dogadaj.getDvorana().getDvoranaId());
+		return dto;
+	}
 
+	@Override
+	public DogadajDetailsDto getDetailsById(Long id) {
+
+		Dogadaj dogadaj = dogadajRepository.findById(id)
+				.orElseThrow(() -> new IllegalArgumentException("Događaj ne postoji."));
+		
+		CjenikFormDto noviCjenik = new CjenikFormDto();
+		noviCjenik.setDogadajId(id);
+		DogadajDetailsDto dto = new DogadajDetailsDto();
+		dto.setDogadaj(dogadaj);
+		dto.setCjenici(cjenikService.findByDogadaj(id));
+		dto.setProdaneUlaznice(ulaznicaService.getSoldTicketsBySektor(id));
+		dto.setDostupniSektori(cjenikService.findAvailableSectors(id));
+		dto.setNoviCjenik(noviCjenik);
 		return dto;
 	}
 

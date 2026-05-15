@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import hr.fer.zpr.infsus.spu.model.Dogadaj;
+import hr.fer.zpr.infsus.spu.dto.DogadajDetailsDto;
 import hr.fer.zpr.infsus.spu.dto.DogadajFormDto;
 
 public interface DogadajService {
@@ -21,5 +22,7 @@ public interface DogadajService {
 	List<Dogadaj> search(String naziv, String kategorija);
 
 	DogadajFormDto getFormDtoById(Long id);
+	
+	DogadajDetailsDto getDetailsById(Long id);
 
 }

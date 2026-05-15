@@ -30,13 +30,11 @@ public class UlaznicaServiceImpl implements UlaznicaService {
 
 		Map<Long, Long> prodaneUlaznice = new HashMap<>();
 		List<Cjenik> cjenici = cjenikRepository.findAllByDogadaj_DogadajIdOrderByCijena(dogadajId);
-
 		for (Cjenik cjenik : cjenici) {
 			long broj = ulaznicaRepository.countByDogadaj_DogadajIdAndSjedalo_Sektor_SektorId(dogadajId,
 					cjenik.getSektor().getSektorId());
 			prodaneUlaznice.put(cjenik.getSektor().getSektorId(), broj);
 		}
-
 		return prodaneUlaznice;
 	}
 

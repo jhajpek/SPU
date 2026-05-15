@@ -25,18 +25,12 @@ public class CjenikController {
 			RedirectAttributes redirectAttributes) {
 
 		if (bindingResult.hasErrors()) {
+			System.out.println(bindingResult.getAllErrors());
 			redirectAttributes.addFlashAttribute("errorMessage", "Neispravni podaci za cjenik.");
 			return "redirect:/dogadaji/" + dto.getDogadajId();
 		}
-
-		try {
-			cjenikService.save(dto);
-			redirectAttributes.addFlashAttribute("successMessage", "Sektor je uspješno dodan.");
-
-		} catch (IllegalArgumentException e) {
-			redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
-		}
-
+		cjenikService.save(dto);
+		redirectAttributes.addFlashAttribute("successMessage", "Sektor je uspješno dodan.");
 		return "redirect:/dogadaji/" + dto.getDogadajId();
 	}
 
@@ -49,15 +43,8 @@ public class CjenikController {
 			return "redirect:/dogadaji/" + dto.getDogadajId();
 		}
 
-		try {
-			cjenikService.update(id, dto);
-			redirectAttributes.addFlashAttribute("successMessage", "Cijena je uspješno ažurirana.");
-
-		} catch (IllegalArgumentException e) {
-
-			redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
-		}
-
+		cjenikService.update(id, dto);
+		redirectAttributes.addFlashAttribute("successMessage", "Cijena je uspješno ažurirana.");
 		return "redirect:/dogadaji/" + dto.getDogadajId();
 	}
 
@@ -65,15 +52,8 @@ public class CjenikController {
 	public String delete(@PathVariable Long id, @ModelAttribute CjenikFormDto dto,
 			RedirectAttributes redirectAttributes) {
 
-		try {
-			cjenikService.deleteById(id);
-			redirectAttributes.addFlashAttribute("successMessage", "Sektor je uklonjen s događaja.");
-
-		} catch (IllegalArgumentException e) {
-
-			redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
-		}
-
+		cjenikService.deleteById(id);
+		redirectAttributes.addFlashAttribute("successMessage", "Sektor je uklonjen s događaja.");
 		return "redirect:/dogadaji/" + dto.getDogadajId();
 	}
 

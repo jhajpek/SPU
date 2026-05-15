@@ -1,6 +1,5 @@
 package hr.fer.zpr.infsus.spu.controller;
 
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -31,7 +30,6 @@ public class DvoranaController {
 
 		model.addAttribute("dvorane", dvoranaService.search(query));
 		model.addAttribute("query", query);
-
 		return "halls/list";
 	}
 
@@ -40,7 +38,6 @@ public class DvoranaController {
 
 		model.addAttribute("dvorana", new DvoranaFormDto());
 		model.addAttribute("lokacije", lokacijaService.findAll());
-
 		return "halls/form";
 	}
 
@@ -55,7 +52,6 @@ public class DvoranaController {
 
 		dvoranaService.save(dto);
 		redirectAttributes.addFlashAttribute("successMessage", "Dvorana je uspješno spremljena.");
-
 		return "redirect:/dvorane";
 	}
 
@@ -64,7 +60,6 @@ public class DvoranaController {
 
 		model.addAttribute("dvorana", dvoranaService.getFormDtoById(id));
 		model.addAttribute("lokacije", lokacijaService.findAll());
-
 		return "halls/form";
 	}
 
@@ -79,20 +74,14 @@ public class DvoranaController {
 
 		dvoranaService.update(id, dto);
 		redirectAttributes.addFlashAttribute("successMessage", "Dvorana je uspješno spremljena.");
-
 		return "redirect:/dvorane";
 	}
 
 	@PostMapping("/delete/{id}")
 	public String delete(@PathVariable Long id, RedirectAttributes redirectAttributes) {
 
-		try {
-			dvoranaService.deleteById(id);
-			redirectAttributes.addFlashAttribute("successMessage", "Dvorana je uspješno obrisana.");
-		} catch (DataIntegrityViolationException | IllegalArgumentException e) {
-			redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
-		}
-
+		dvoranaService.deleteById(id);
+		redirectAttributes.addFlashAttribute("successMessage", "Dvorana je uspješno obrisana.");
 		return "redirect:/dvorane";
 	}
 

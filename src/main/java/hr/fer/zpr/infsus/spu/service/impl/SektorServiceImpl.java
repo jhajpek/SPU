@@ -48,7 +48,6 @@ public class SektorServiceImpl implements SektorService {
 				.orElseThrow(() -> new IllegalArgumentException("Dvorana ne postoji."));
 
 		Sektor sektor = new Sektor();
-
 		sektor.setNaziv(dto.getNaziv());
 		sektor.setKapacitet(dto.getKapacitet());
 		sektor.setDvorana(dvorana);
@@ -74,17 +73,13 @@ public class SektorServiceImpl implements SektorService {
 		sektor.setNaziv(dto.getNaziv());
 		sektor.setKapacitet(dto.getKapacitet());
 		boolean koristiSeUCjeniku = cjenikRepository.existsBySektor_SektorId(id);
-
 		boolean postojeUlaznice = ulaznicaRepository.existsBySjedalo_Sektor_SektorId(id);
-
 		boolean mijenjaDvoranu = !sektor.getDvorana().getDvoranaId().equals(dto.getDvoranaId());
 
 		if (mijenjaDvoranu && (koristiSeUCjeniku || postojeUlaznice)) {
-
 			throw new IllegalArgumentException("Dvoranu nije moguće promijeniti " + "jer je sektor već korišten.");
 		}
 		sektor.setDvorana(dvorana);
-
 		return sektorRepository.save(sektor);
 	}
 
@@ -105,7 +100,6 @@ public class SektorServiceImpl implements SektorService {
 				.orElseThrow(() -> new IllegalArgumentException("Sektor ne postoji."));
 
 		SektorFormDto dto = new SektorFormDto();
-
 		dto.setSektorId(sektor.getSektorId());
 		dto.setNaziv(sektor.getNaziv());
 		dto.setKapacitet(sektor.getKapacitet());
@@ -122,21 +116,17 @@ public class SektorServiceImpl implements SektorService {
 		if (!naziv.isEmpty() && dvoranaId != null) {
 			return sektorRepository.findAllByNazivContainsIgnoreCaseAndDvorana_DvoranaIdOrderByNaziv(naziv, dvoranaId);
 		}
-
 		if (!naziv.isEmpty()) {
 			return sektorRepository.findAllByNazivContainsIgnoreCaseOrderByDvorana_Naziv(naziv);
 		}
-
 		if (dvoranaId != null) {
 			return sektorRepository.findAllByDvorana_DvoranaIdOrderByNaziv(dvoranaId);
 		}
-
 		return sektorRepository.findAll();
 	}
 
 	@Override
 	public List<Sektor> findByDvorana(Long dvoranaId) {
-
 		return sektorRepository.findAllByDvorana_DvoranaIdOrderByNaziv(dvoranaId);
 	}
 

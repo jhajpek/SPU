@@ -35,12 +35,9 @@ public class CjenikServiceImpl implements CjenikService {
 
 		Dogadaj dogadaj = dogadajRepository.findById(dogadajId)
 				.orElseThrow(() -> new IllegalArgumentException("Događaj ne postoji."));
-
 		List<Sektor> sviSektori = sektorRepository
 				.findAllByDvorana_DvoranaIdOrderByNaziv(dogadaj.getDvorana().getDvoranaId());
-
 		List<Long> vecDodaniSektori = dogadaj.getCjenici().stream().map(c -> c.getSektor().getSektorId()).toList();
-
 		return sviSektori.stream().filter(sektor -> !vecDodaniSektori.contains(sektor.getSektorId())).toList();
 	}
 
@@ -48,7 +45,6 @@ public class CjenikServiceImpl implements CjenikService {
 	public Cjenik save(CjenikFormDto dto) {
 
 		if (cjenikRepository.existsByDogadaj_DogadajIdAndSektor_SektorId(dto.getDogadajId(), dto.getSektorId())) {
-
 			throw new IllegalArgumentException("Sektor je već dodan za ovaj događaj.");
 		}
 
@@ -59,16 +55,13 @@ public class CjenikServiceImpl implements CjenikService {
 				.orElseThrow(() -> new IllegalArgumentException("Sektor ne postoji."));
 
 		if (!sektor.getDvorana().getDvoranaId().equals(dogadaj.getDvorana().getDvoranaId())) {
-
 			throw new IllegalArgumentException("Sektor ne pripada odabranoj dvorani.");
 		}
 
 		Cjenik cjenik = new Cjenik();
-
 		cjenik.setDogadaj(dogadaj);
 		cjenik.setSektor(sektor);
 		cjenik.setCijena(dto.getCijena());
-
 		return cjenikRepository.save(cjenik);
 	}
 
@@ -79,7 +72,6 @@ public class CjenikServiceImpl implements CjenikService {
 				.orElseThrow(() -> new IllegalArgumentException("Cjenik ne postoji."));
 
 		cjenik.setCijena(dto.getCijena());
-
 		return cjenikRepository.save(cjenik);
 	}
 
@@ -93,7 +85,6 @@ public class CjenikServiceImpl implements CjenikService {
 				cjenik.getDogadaj().getDogadajId(), cjenik.getSektor().getSektorId());
 
 		if (postojeUlaznice) {
-
 			throw new IllegalArgumentException("Sektor nije moguće ukloniti jer postoje prodane ulaznice.");
 		}
 
