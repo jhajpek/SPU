@@ -31,7 +31,7 @@ public class DvoranaServiceImpl implements DvoranaService {
 	}
 
 	@Override
-	public List<Lokacija> findAllUnusedLokacijas() {
+	public List<Lokacija> findAllUnusedLokacije() {
 		Set<Long> used = dvoranaRepository.findAll().stream().
 				map(d -> d.getLokacija().getLokacijaId()).collect(Collectors.toSet());
 		return lokacijaRepository.findAll().stream().

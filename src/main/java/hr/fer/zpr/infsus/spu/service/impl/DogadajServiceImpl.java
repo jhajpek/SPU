@@ -4,7 +4,6 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
-import hr.fer.zpr.infsus.spu.model.Lokacija;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
@@ -114,10 +113,16 @@ public class DogadajServiceImpl implements DogadajService {
 		naziv = naziv == null ? "" : naziv.trim();
 		kategorija = kategorija == null ? "" : kategorija.trim();
 
+		if (!naziv.isEmpty() && !kategorija.isEmpty()) {
+			return dogadajRepository.findAllByNazivContainsIgnoreCaseAndKategorijaContainsIgnoreCaseAndDatumVrijemeOdrzavanjaAfterOrderByDatumVrijemeOdrzavanja(
+					naziv, kategorija, LocalDateTime.now()
+			);
+		}
+
 		if (!naziv.isEmpty()) {
 			return dogadajRepository
-					.findAllByNazivContainsIgnoreCaseAndDatumVrijemeOdrzavanjaAfterOrderByDatumVrijemeOdrzavanja(naziv,
-							LocalDateTime.now());
+					.findAllByNazivContainsIgnoreCaseAndDatumVrijemeOdrzavanjaAfterOrderByDatumVrijemeOdrzavanja(
+							naziv, LocalDateTime.now());
 		}
 
 		if (!kategorija.isEmpty()) {

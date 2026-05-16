@@ -35,7 +35,7 @@ public class DvoranaController {
 	public String createForm(Model model) {
 
 		model.addAttribute("dvorana", new DvoranaFormDto());
-		model.addAttribute("lokacije", dvoranaService.findAllUnusedLokacijas());
+		model.addAttribute("lokacije", dvoranaService.findAllUnusedLokacije());
 		return "halls/form";
 	}
 
@@ -44,7 +44,7 @@ public class DvoranaController {
 			RedirectAttributes redirectAttributes) {
 
 		if (bindingResult.hasErrors()) {
-			model.addAttribute("lokacije", dvoranaService.findAllUnusedLokacijas());
+			model.addAttribute("lokacije", dvoranaService.findAllUnusedLokacije());
 			return "halls/form";
 		}
 
@@ -57,7 +57,7 @@ public class DvoranaController {
 	public String editForm(@PathVariable Long id, Model model) {
 
 		model.addAttribute("dvorana", dvoranaService.getFormDtoById(id));
-		model.addAttribute("lokacije", dvoranaService.findAllUnusedLokacijas());
+		model.addAttribute("lokacije", dvoranaService.findAllUnusedLokacije());
 		return "halls/form";
 	}
 
@@ -66,7 +66,7 @@ public class DvoranaController {
 			BindingResult bindingResult, Model model, RedirectAttributes redirectAttributes) {
 
 		if (bindingResult.hasErrors()) {
-			model.addAttribute("lokacije", dvoranaService.findAllUnusedLokacijas());
+			model.addAttribute("lokacije", dvoranaService.findAllUnusedLokacije());
 			return "halls/form";
 		}
 

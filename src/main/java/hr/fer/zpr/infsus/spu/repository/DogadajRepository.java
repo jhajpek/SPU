@@ -18,6 +18,9 @@ public interface DogadajRepository extends JpaRepository<Dogadaj, Long> {
 	List<Dogadaj> findAllByKategorijaContainsIgnoreCaseAndDatumVrijemeOdrzavanjaAfterOrderByDatumVrijemeOdrzavanja(
 			@NotBlank @Size(max = 20) String kategorija, @NotNull @Future LocalDateTime datumVrijeme);
 
+	List<Dogadaj> findAllByNazivContainsIgnoreCaseAndKategorijaContainsIgnoreCaseAndDatumVrijemeOdrzavanjaAfterOrderByDatumVrijemeOdrzavanja(
+			@NotBlank @Size(max = 50) String naziv, @NotBlank @Size(max = 20) String kategorija, @NotNull @Future LocalDateTime datumVrijemeOdrzavanja);
+
 	List<Dogadaj> findAllByOpisContainsIgnoreCaseAndDatumVrijemeOdrzavanjaAfterOrderByDatumVrijemeOdrzavanja(
 			@Size(max = 500) String opis, @NotNull @Future LocalDateTime datumVrijeme);
 
