@@ -37,7 +37,7 @@ public class DvoranaRepositoryTests {
     }
 
     @Test
-    public void DvoranaRepository_ExistsByLokacijaId_ReturnsBoolean() {
+    public void DvoranaRepository_FindDvoranaByLokacijaId_ReturnDvoranaExists() {
         Lokacija lokacija = lokacijaRepository.save(EntityFactory.createLokacija());
         Dvorana dvorana = EntityFactory.createDvorana("Arena", lokacija);
         dvoranaRepository.save(dvorana);
@@ -50,7 +50,7 @@ public class DvoranaRepositoryTests {
     }
 
     @Test
-    public void DvoranaRepository_ExistsByLokacijaIdNotByDvoranaId_ReturnsBoolean() {
+    public void DvoranaRepository_FindDvoranaByLokacijaIdNotByDvoranaId_ReturnDvoranaExists() {
         Lokacija lokacija1 = lokacijaRepository.save(EntityFactory.createLokacija());
         Lokacija lokacija2 = lokacijaRepository.save(EntityFactory.createLokacija());
         Dvorana dvorana1 = EntityFactory.createDvorana("Arena", lokacija1);
@@ -114,7 +114,7 @@ public class DvoranaRepositoryTests {
     }
 
     @Test
-    public void DvoranaRepository_SaveAndDeleteCascadingDvoranaSektors_ReturnNothing() {
+    public void DvoranaRepository_SaveAndDeleteDvorane_ReturnCascadingSektori() {
         Lokacija lokacija = lokacijaRepository.save(EntityFactory.createLokacija());
 
         Dvorana dvorana = EntityFactory.createDvorana("Arena", lokacija);

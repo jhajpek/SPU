@@ -38,18 +38,18 @@ public class KorisnikRepositoryTests {
     }
 
     @Test
-    public void KorisnikRepository_SaveAndFindAllKorisniks_ReturnKorisnikList() {
+    public void KorisnikRepository_SaveAndFindAllKorisnici_ReturnKorisnikList() {
         Korisnik korisnik1 = EntityFactory.createKorisnik();
         Korisnik korisnik2 = EntityFactory.createKorisnik();
         korisnik2.setEmail("marko.mamic2@gmail.com");
         korisnikRepository.saveAll(List.of(korisnik1, korisnik2));
 
-        int numberOfKorisniks = korisnikRepository.findAll().size();
-        Assertions.assertEquals(2, numberOfKorisniks);
+        long numberOfKorisnika = korisnikRepository.count();
+        Assertions.assertEquals(2, numberOfKorisnika);
     }
 
     @Test
-    public void KorisnikRepository_CheckIfKorisnikEmailExists_ReturnBoolean() {
+    public void KorisnikRepository_FindKorisnikByEmail_ReturnKorisnikExists() {
         Korisnik korisnik = EntityFactory.createKorisnik();
         korisnikRepository.save(korisnik);
 
@@ -84,7 +84,7 @@ public class KorisnikRepositoryTests {
     }
 
     @Test
-    public void KorisnikRepository_DeleteExistingKorisnik_ReturnNothing() {
+    public void KorisnikRepository_DeleteExistingKorisnik_ReturnKorisnikNotExists() {
         Korisnik korisnik = EntityFactory.createKorisnik();
 
         korisnikRepository.save(korisnik);

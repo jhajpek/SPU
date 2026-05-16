@@ -7,8 +7,6 @@ import java.util.List;
 
 public interface SektorRepository extends JpaRepository<Sektor, Long> {
 
-	List<Sektor> findAllByDvorana_DvoranaId(Long dvoranaId);
-
 	List<Sektor> findAllByNazivContainsIgnoreCaseOrderByDvorana_Naziv(String naziv);
 
 	List<Sektor> findAllByDvorana_DvoranaIdOrderByNaziv(Long dvoranaId);

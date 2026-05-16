@@ -45,17 +45,17 @@ public class KupacRepositoryTests {
     }
 
     @Test
-    public void KupacRepository_SaveAndFindAllKupacs_ReturnKupacList() {
+    public void KupacRepository_SaveAndFindAllKupci_ReturnKupacList() {
         Kupac kupac1 = EntityFactory.createKupac();
         Kupac kupac2 = EntityFactory.createKupac();
         kupac2.setEmail("marko.mamic2@gmail.com");
         kupacRepository.saveAll(List.of(kupac1, kupac2));
 
-        int numberOfKupacs = kupacRepository.findAll().size();
-        Assertions.assertEquals(2, numberOfKupacs);
+        long numberOfKupaca = kupacRepository.count();
+        Assertions.assertEquals(2, numberOfKupaca);
 
-        int numberOfKorisniks = korisnikRepository.findAll().size();
-        Assertions.assertEquals(2, numberOfKorisniks);
+        long numberOfKorisnika = korisnikRepository.count();
+        Assertions.assertEquals(2, numberOfKorisnika);
     }
 
     @Test
@@ -82,7 +82,7 @@ public class KupacRepositoryTests {
     }
 
     @Test
-    public void KupacRepository_DeleteExistingKupac_ReturnNothing() {
+    public void KupacRepository_DeleteExistingKupac_ReturnKupacNotExists() {
         Kupac kupac = EntityFactory.createKupac();
 
         kupacRepository.save(kupac);

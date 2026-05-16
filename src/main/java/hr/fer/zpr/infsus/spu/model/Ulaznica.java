@@ -45,7 +45,6 @@ public class Ulaznica {
     @Column(name = "qr_kod", unique = true, length = 500, nullable = false)
     private String qrKod;
 
-    @NotNull
     @CreationTimestamp
     @Column(nullable = false)
     private LocalDateTime datumVrijemeKupnje;

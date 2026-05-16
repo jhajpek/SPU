@@ -45,17 +45,17 @@ public class AdministratorRepositoryTests {
     }
 
     @Test
-    public void AdministratorRepository_SaveAndFindAllAdministrators_ReturnAdministratorList() {
+    public void AdministratorRepository_SaveAndFindAllAdministratori_ReturnAdministratorList() {
         Administrator administrator1 = EntityFactory.createAdministrator();
         Administrator administrator2 = EntityFactory.createAdministrator();
         administrator2.setEmail("marko.mamic2@gmail.com");
         administratorRepository.saveAll(List.of(administrator1, administrator2));
 
-        int numberOfAdministrators = administratorRepository.findAll().size();
-        Assertions.assertEquals(2, numberOfAdministrators);
+        long numberOfAdministratora = administratorRepository.count();
+        Assertions.assertEquals(2, numberOfAdministratora);
 
-        int numberOfKorisniks = korisnikRepository.findAll().size();
-        Assertions.assertEquals(2, numberOfKorisniks);
+        long numberOfKorisnika = korisnikRepository.count();
+        Assertions.assertEquals(2, numberOfKorisnika);
     }
 
     @Test
@@ -82,7 +82,7 @@ public class AdministratorRepositoryTests {
     }
 
     @Test
-    public void AdministratorRepository_DeleteExistingAdministrator_ReturnNothing() {
+    public void AdministratorRepository_DeleteExistingAdministrator_ReturnAdministratorNotExists() {
         Administrator administrator = EntityFactory.createAdministrator();
 
         administratorRepository.save(administrator);

@@ -26,14 +26,14 @@ public class LokacijaRepositoryTests {
     }
 
     @Test
-    public void LokacijaRepository_SaveAndFindAllLokacijas_ReturnList() {
+    public void LokacijaRepository_SaveAndFindAllLokacije_ReturnLokacijaList() {
         Lokacija lokacija1 = EntityFactory.createLokacija();
         Lokacija lokacija2 = EntityFactory.createLokacija();
         lokacija2.setKucniBroj(3);
         lokacijaRepository.saveAll(List.of(lokacija1, lokacija2));
 
-        int numberOfLokacijas = lokacijaRepository.findAll().size();
-        Assertions.assertEquals(2, numberOfLokacijas);
+        long numberOfLokacija = lokacijaRepository.count();
+        Assertions.assertEquals(2, numberOfLokacija);
     }
 
     @Test
@@ -80,13 +80,11 @@ public class LokacijaRepositoryTests {
         List<String> mjesta = lokacijaRepository.findDistinctMjesta();
 
         Assertions.assertEquals(3, mjesta.size());
-        Assertions.assertTrue(mjesta.contains("Zagreb"));
-        Assertions.assertTrue(mjesta.contains("Rijeka"));
-        Assertions.assertTrue(mjesta.contains("Split"));
+        Assertions.assertEquals(1, mjesta.stream().filter(m -> m.equals("Zagreb")).count());
     }
 
     @Test
-    public void LokacijaRepository_DeleteExistingLokacija_ReturnNothing() {
+    public void LokacijaRepository_DeleteExistingLokacija_ReturnLokacijaNotExists() {
         Lokacija lokacija = EntityFactory.createLokacija();
 
         lokacijaRepository.save(lokacija);

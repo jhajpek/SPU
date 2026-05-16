@@ -1,13 +1,18 @@
 package hr.fer.zpr.infsus.spu.util;
 
 import hr.fer.zpr.infsus.spu.model.Administrator;
+import hr.fer.zpr.infsus.spu.model.Cjenik;
 import hr.fer.zpr.infsus.spu.model.Dogadaj;
 import hr.fer.zpr.infsus.spu.model.Dvorana;
 import hr.fer.zpr.infsus.spu.model.Korisnik;
 import hr.fer.zpr.infsus.spu.model.Kupac;
 import hr.fer.zpr.infsus.spu.model.Lokacija;
+import hr.fer.zpr.infsus.spu.model.Rezervacija;
 import hr.fer.zpr.infsus.spu.model.Sektor;
+import hr.fer.zpr.infsus.spu.model.Sjedalo;
+import hr.fer.zpr.infsus.spu.model.Ulaznica;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 public class EntityFactory {
@@ -63,6 +68,14 @@ public class EntityFactory {
         return sektor;
     }
 
+    public static Sjedalo createSjedalo(Integer red, Integer broj, Sektor sektor) {
+        Sjedalo sjedalo = new Sjedalo();
+        sjedalo.setRed(red);
+        sjedalo.setBroj(broj);
+        sjedalo.setSektor(sektor);
+        return sjedalo;
+    }
+
     public static Dogadaj createDogadaj(String naziv, Dvorana dvorana) {
         Dogadaj dogadaj = new Dogadaj();
         dogadaj.setNaziv(naziv);
@@ -71,6 +84,32 @@ public class EntityFactory {
         dogadaj.setDatumVrijemeOdrzavanja(LocalDateTime.now().plusDays(7));
         dogadaj.setDvorana(dvorana);
         return dogadaj;
+    }
+
+    public static Cjenik createCjenik(BigDecimal cijena, Dogadaj dogadaj, Sektor sektor) {
+        Cjenik cjenik = new Cjenik();
+        cjenik.setCijena(cijena);
+        cjenik.setDogadaj(dogadaj);
+        cjenik.setSektor(sektor);
+        return cjenik;
+    }
+
+    public static Rezervacija createRezervacija(Kupac kupac, Dogadaj dogadaj, Sjedalo sjedalo) {
+        Rezervacija rezervacija = new Rezervacija();
+        rezervacija.setDatumVrijemeIsteka(LocalDateTime.now().plusMinutes(15));
+        rezervacija.setKupac(kupac);
+        rezervacija.setDogadaj(dogadaj);
+        rezervacija.setSjedalo(sjedalo);
+        return rezervacija;
+    }
+
+    public static Ulaznica createUlaznica(Kupac kupac, Dogadaj dogadaj, Sjedalo sjedalo) {
+        Ulaznica ulaznica = new Ulaznica();
+        ulaznica.setQrKod(dogadaj.getDogadajId() + " " + sjedalo.getSjedaloId());
+        ulaznica.setKupac(kupac);
+        ulaznica.setDogadaj(dogadaj);
+        ulaznica.setSjedalo(sjedalo);
+        return ulaznica;
     }
 
 }
