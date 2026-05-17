@@ -1,8 +1,7 @@
 package hr.fer.zpr.infsus.spu.integration;
 
-import java.math.BigDecimal;
-
 import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +22,8 @@ import hr.fer.zpr.infsus.spu.repository.DvoranaRepository;
 import hr.fer.zpr.infsus.spu.repository.LokacijaRepository;
 import hr.fer.zpr.infsus.spu.repository.SektorRepository;
 import hr.fer.zpr.infsus.spu.util.EntityFactory;
+
+import java.math.BigDecimal;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles("test")
@@ -49,15 +50,9 @@ public class CjenikIntegrationTests {
 	private SektorRepository sektorRepository;
 
 	@BeforeEach
-	public void setUpWebTestClient() {
+	public void setUpWebTestClientAndRepositories() {
 
 		webTestClient = WebTestClient.bindToServer().baseUrl("http://localhost:" + port).build();
-
-		cjenikRepository.deleteAll();
-		sektorRepository.deleteAll();
-		dogadajRepository.deleteAll();
-		dvoranaRepository.deleteAll();
-		lokacijaRepository.deleteAll();
 
 		Lokacija lokacija = EntityFactory.createLokacija();
 		lokacija = lokacijaRepository.save(lokacija);
@@ -73,6 +68,15 @@ public class CjenikIntegrationTests {
 
 		Cjenik cjenik = EntityFactory.createCjenik(BigDecimal.valueOf(20), dogadaj, sektor);
 		cjenikRepository.save(cjenik);
+	}
+
+	@AfterEach
+	public void cleanUpRepositories() {
+		cjenikRepository.deleteAll();
+		sektorRepository.deleteAll();
+		dogadajRepository.deleteAll();
+		dvoranaRepository.deleteAll();
+		lokacijaRepository.deleteAll();
 	}
 
 	@Test

@@ -8,6 +8,7 @@ import hr.fer.zpr.infsus.spu.repository.LokacijaRepository;
 import hr.fer.zpr.infsus.spu.repository.SektorRepository;
 import hr.fer.zpr.infsus.spu.util.EntityFactory;
 import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,13 +38,9 @@ public class SektorIntegrationTests {
 	private LokacijaRepository lokacijaRepository;
 
 	@BeforeEach
-	public void setUpWebTestClient() {
+	public void setUpWebTestClientAndRepositories() {
 
 		webTestClient = WebTestClient.bindToServer().baseUrl("http://localhost:" + port).build();
-
-		sektorRepository.deleteAll();
-		dvoranaRepository.deleteAll();
-		lokacijaRepository.deleteAll();
 
 		Lokacija lokacija = EntityFactory.createLokacija();
 		lokacija = lokacijaRepository.save(lokacija);
@@ -54,6 +51,13 @@ public class SektorIntegrationTests {
 		Sektor sektor = EntityFactory.createSektor("Parter", 100, dvorana);
 
 		sektorRepository.save(sektor);
+	}
+
+	@AfterEach
+	public void cleanUpRepositories() {
+		sektorRepository.deleteAll();
+		dvoranaRepository.deleteAll();
+		lokacijaRepository.deleteAll();
 	}
 
 	@Test

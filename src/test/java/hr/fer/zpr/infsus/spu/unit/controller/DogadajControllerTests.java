@@ -24,6 +24,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -149,6 +150,26 @@ public class DogadajControllerTests {
                 .andExpect(model().attributeExists("dogadaj"));
 
         verify(dogadajService, never()).update(eq(1L), any(DogadajFormDto.class));
+    }
+
+    @Test
+    public void DogadajController_PostDogadajFormToEditWhenServiceThrowsIllegalArgumentException_ReturnFormView() throws Exception {
+        String errorMessage = "U odabranoj dvorani već postoji događaj u tom terminu.";
+
+        doThrow(new IllegalArgumentException(errorMessage)).when(dogadajService).update(anyLong(), any(DogadajFormDto.class));
+
+        mockMvc.perform(post("/dogadaji/edit/1")
+                        .param("naziv", "Dogadaj")
+                        .param("kategorija", "Sport")
+                        .param("opis", "")
+                        .param("datumVrijemeOdrzavanja", "2027-05-05T12:00")
+                        .param("dvoranaId", "1"))
+                .andExpect(status().isOk())
+                .andExpect(view().name("events/form"))
+                .andExpect(model().attributeExists("dogadaj"))
+                .andExpect(model().attribute("errorMessage", errorMessage));
+
+        verify(dogadajService, times(1)).update(eq(1L), any(DogadajFormDto.class));
     }
 
     @Test

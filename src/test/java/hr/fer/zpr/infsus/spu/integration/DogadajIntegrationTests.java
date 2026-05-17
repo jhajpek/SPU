@@ -3,6 +3,7 @@ package hr.fer.zpr.infsus.spu.integration;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,13 +41,9 @@ public class DogadajIntegrationTests {
 	private LokacijaRepository lokacijaRepository;
 
 	@BeforeEach
-	public void setUpWebTestClient() {
+	public void setUpWebTestClientAndRepositories() {
 
 		webTestClient = WebTestClient.bindToServer().baseUrl("http://localhost:" + port).build();
-
-		dogadajRepository.deleteAll();
-		dvoranaRepository.deleteAll();
-		lokacijaRepository.deleteAll();
 
 		Lokacija lokacija = EntityFactory.createLokacija();
 		lokacija = lokacijaRepository.save(lokacija);
@@ -56,6 +53,13 @@ public class DogadajIntegrationTests {
 
 		Dogadaj dogadaj = EntityFactory.createDogadaj("Koncert", dvorana);
 		dogadajRepository.save(dogadaj);
+	}
+
+	@AfterEach
+	public void cleanUpRepositories() {
+		dogadajRepository.deleteAll();
+		dvoranaRepository.deleteAll();
+		lokacijaRepository.deleteAll();
 	}
 
 	@Test
@@ -169,7 +173,7 @@ public class DogadajIntegrationTests {
 	}
 
 	@Test
-	public void DogadajTestClient_SearchDogadaji_ReturnFilteredResults() {
+	public void DogadajTestClient_SearchDogadaji_ReturnFilteredListView() {
 
 		webTestClient.get().uri("/dogadaji?naziv=Koncert").exchange().expectStatus().isOk().expectBody(String.class)
 				.value(html -> {
@@ -179,7 +183,7 @@ public class DogadajIntegrationTests {
 	}
 
 	@Test
-	public void DogadajTestClient_GetInvalidDogadaj_ReturnServerError() {
+	public void DogadajTestClient_GetInvalidDogadaj_ReturnServerErrorView() {
 
 		webTestClient.get().uri("/dogadaji/999999").exchange().expectStatus().is3xxRedirection();
 	}

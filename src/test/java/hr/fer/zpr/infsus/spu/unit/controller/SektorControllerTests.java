@@ -16,6 +16,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -143,6 +144,25 @@ public class SektorControllerTests {
                 .andExpect(model().hasErrors())
                 .andExpect(model().attributeExists("dvorane"));
 
+        verify(dvoranaService, times(1)).findAll();
+    }
+
+    @Test
+    public void SektorController_PostSektorFormToEditWhenServiceThrowsIllegalArgumentException_ReturnFormView() throws Exception {
+        String errorMessage = "Sektor s tim nazivom već postoji u odabranoj dvorani.";
+
+        doThrow(new IllegalArgumentException(errorMessage)).when(sektorService).update(anyLong(), any(SektorFormDto.class));
+
+        mockMvc.perform(post("/sektori/edit/1")
+                        .param("naziv", "VIP")
+                        .param("kapacitet", "100")
+                        .param("dvoranaId", "1"))
+                .andExpect(status().isOk())
+                .andExpect(view().name("sectors/form"))
+                .andExpect(model().attributeExists("dvorane"))
+                .andExpect(model().attribute("errorMessage", errorMessage));
+
+        verify(sektorService, times(1)).update(eq(1L), any(SektorFormDto.class));
         verify(dvoranaService, times(1)).findAll();
     }
 

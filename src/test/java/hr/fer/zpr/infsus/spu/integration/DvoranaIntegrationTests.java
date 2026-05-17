@@ -6,6 +6,7 @@ import hr.fer.zpr.infsus.spu.repository.DvoranaRepository;
 import hr.fer.zpr.infsus.spu.repository.LokacijaRepository;
 import hr.fer.zpr.infsus.spu.util.EntityFactory;
 import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,11 +35,8 @@ public class DvoranaIntegrationTests {
 	private DvoranaRepository dvoranaRepository;
 
 	@BeforeEach
-	public void setUpWebTestClient() {
+	public void setUpWebTestClientAndRepositories() {
 		webTestClient = WebTestClient.bindToServer().baseUrl("http://localhost:" + port).build();
-
-		dvoranaRepository.deleteAll();
-		lokacijaRepository.deleteAll();
 
 		Lokacija lokacija1 = EntityFactory.createLokacija();
 		Lokacija lokacija2 = EntityFactory.createLokacija();
@@ -52,11 +50,19 @@ public class DvoranaIntegrationTests {
 		dvoranaRepository.saveAll(List.of(dvorana1, dvorana2));
 	}
 
+	@AfterEach
+	public void cleanUpRepositories() {
+		dvoranaRepository.deleteAll();
+		lokacijaRepository.deleteAll();
+	}
+
 	@Test
 	public void DvoranaTestClient_GetDvorane_ReturnListView() {
 		webTestClient.get().uri("/dvorane").exchange().expectStatus().isOk().expectBody(String.class).value(html -> {
 			Assertions.assertThatCharSequence(html).contains("Popis dvorana");
 			Assertions.assertThatCharSequence(html).contains("Dodaj dvoranu");
+			Assertions.assertThatCharSequence(html).contains("Zagreb");
+			Assertions.assertThatCharSequence(html).contains("Rijeka");
 		});
 
 		Assertions.assertThat(dvoranaRepository.count()).isEqualTo(2L);
