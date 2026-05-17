@@ -12,7 +12,13 @@ INSERT INTO LOKACIJA (ulica, kucni_broj, postanski_broj, mjesto) VALUES
 ('Ulica Vice Vukova', 8, '10000', 'Zagreb'),
 ('Trg Stjepana Radića', 4, '10000', 'Zagreb'),
 ('Tončićeva ulica', 1, '21000', 'Split'),
-('Ulica Kneza Trpimira', 23, '31000', 'Osijek');
+('Ulica Kneza Trpimira', 23, '31000', 'Osijek'),
+('Vukovarska ulica', 269, '10000', 'Zagreb'),
+('Obala Hrvatskog narodnog preporoda', 22, '21000', 'Split'),
+('Korzo', 28, '51000', 'Rijeka'),
+('Ulica Hrvatske Republike', 19, '31000', 'Osijek'),
+('Zrinsko Frankopanska ulica', 20, '23000', 'Zadar'),
+('Šetalište Franje Tuđmana', 1, '20000', 'Dubrovnik');
 
 INSERT INTO DVORANA (naziv, lokacija_id) VALUES
 ('Koncertna dvorana Vatroslava Lisinskog', 2),
@@ -20,9 +26,9 @@ INSERT INTO DVORANA (naziv, lokacija_id) VALUES
 ('Dvorana Gradski vrt', 4);
 
 INSERT INTO DOGADAJ (naziv, kategorija, opis, datum_vrijeme_odrzavanja, dvorana_id) VALUES
-('TBF & CROATIAN RADIOTELEVISION JAZZ ORCHESTRA', 'GLAZBA', NULL, '2026-06-11 20:00:00', 1),
+('TBF & CROATIAN RADIOTELEVISION JAZZ ORCHESTRA', 'GLAZBA', 'Koncertna suradnja kultnog zagrebačkog sastava TBF i Jazz orkestra Hrvatske radiotelevizije donosi spoj hip hopa, funka i jazz aranžmana u jedinstvenom glazbenom iskustvu.', '2026-06-11 20:00:00', 1),
 ('MARE #zenamajkaglumica', 'DRAMA', 'Ovaj autorski projekt Marijane Mikulić osobna je priča u kojoj bez uljepšavanja progovara o odnosima muškaraca i žena, braku, majčinstvu te pokušajima da uskladi majčinstvo, posao i sve ono što se dogodi između. Iskrena i autentična, kao i uvijek, Mare u ovoj autobiografskoj priči otvara trenutke u kojima se mnogi prepoznaju, ali ne izgovaraju to često naglas.Predstava je namijenjena publici u dobi od 15+.', '2026-06-25 20:00:00', 1),
-('Lucija Dujmović, klarinet', 'GLAZBA', NULL, '2026-06-12 20:30:00', 2),
+('Lucija Dujmović, klarinet', 'GLAZBA', 'Mlada klarinetistica Lucija Dujmović predstavlja večer klasične glazbe uz izvedbe domaćih i stranih skladatelja za klarinet i klavir.', '2026-06-12 20:30:00', 2),
 ('Koncert "Tragom Olivera"', 'GLAZBA', 'Glazbena priča posvećena Oliveru Dragojeviću. Večer će oživjeti uz pjesme koje poznaju svi: "Moj lipi anđele", "Nadalina", "Nedostaješ mi ti", "Trag u beskraju", "Oprosti mi pape" i mnoge druge. Na pozornicu Gradskog vrta 25. travnja uspinju se Oliverovi Dupini i njegovi dugogodišnji suradnici Zorica Kondža, Tedi Spalato, Goran Karan i Petar Dragojević.', '2026-06-25 21:00:00', 3),
 (
  '2Cellos Reunion Tour',
