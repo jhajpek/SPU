@@ -32,7 +32,7 @@ public class GlobalExceptionHandlerTests {
 
     @Test
     public void GlobalExceptionHandler_HandleNoResourceFoundException_ReturnErrorView() throws Exception {
-        mockMvc.perform(get("/"))
+        mockMvc.perform(get("/blabla"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("error/error"))
                 .andExpect(model().attribute("errorMessage", "Stranica koju tražite ne postoji."));
