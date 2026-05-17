@@ -27,14 +27,15 @@ public class GlobalExceptionHandler {
 	}
 
 	@ExceptionHandler(NoResourceFoundException.class)
-	public String handleNoResourceFound(NoResourceFoundException ex, Model model) {
+	public String handleNoResourceFound(NoResourceFoundException e, Model model) {
 		model.addAttribute("errorMessage", "Stranica koju tražite ne postoji.");
 		return "error/error";
 	}
 
 	@ExceptionHandler(Exception.class)
-	public String handleGeneralException(Exception ex, Model model) {
+	public String handleGeneralException(Exception e, Model model) {
 		model.addAttribute("errorMessage", "Dogodila se pogreška na poslužitelju.");
 		return "error/error";
 	}
+
 }

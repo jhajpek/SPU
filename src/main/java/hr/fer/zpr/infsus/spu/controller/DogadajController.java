@@ -48,7 +48,7 @@ public class DogadajController {
 	}
 
 	@PostMapping
-	public String save(@Valid @ModelAttribute DogadajFormDto dto, BindingResult bindingResult, Model model,
+	public String save(@Valid @ModelAttribute("dogadaj") DogadajFormDto dto, BindingResult bindingResult,
 			RedirectAttributes redirectAttributes) {
 
 		if (bindingResult.hasErrors()) {
