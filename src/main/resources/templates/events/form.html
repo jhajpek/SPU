@@ -122,7 +122,12 @@
         <div class="actions">
           <button type="submit">Spremi</button>
 
-          <a class="btn" th:href="@{/dogadaji/{id}(id=${dogadaj.dogadajId})}">
+          <a
+            class="btn"
+            th:href="${dogadaj.dogadajId} != null
+      ? @{/dogadaji/{id}(id=${dogadaj.dogadajId})}
+      : @{/dogadaji}"
+          >
             Odustani
           </a>
         </div>

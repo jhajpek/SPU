@@ -11,7 +11,7 @@ public interface DvoranaService {
 
 	List<Dvorana> findAll();
 
-	List<Lokacija> findAllUnusedLokacije();
+	List<Lokacija> findAllUnusedLokacije(Long id);
 
 	Optional<Dvorana> findById(Long id);
 

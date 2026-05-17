@@ -30,117 +30,96 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WebMvcTest(DvoranaController.class)
 public class DvoranaControllerTests {
 
-    @Autowired
-    private MockMvc mockMvc;
+	@Autowired
+	private MockMvc mockMvc;
 
-    @MockitoBean
-    private DvoranaService dvoranaService;
+	@MockitoBean
+	private DvoranaService dvoranaService;
 
-    @Test
-    public void DvoranaController_GetDvorane_ReturnListView() throws Exception {
-        when(dvoranaService.search(anyString())).thenReturn(List.of());
+	@Test
+	public void DvoranaController_GetDvorane_ReturnListView() throws Exception {
+		when(dvoranaService.search(anyString())).thenReturn(List.of());
 
-        mockMvc.perform(get("/dvorane").param("query", "Arena"))
-                .andExpect(status().isOk())
-                .andExpect(view().name("halls/list"))
-                .andExpect(model().attributeExists("dvorane"))
-                .andExpect(model().attribute("query", "Arena"));
+		mockMvc.perform(get("/dvorane").param("query", "Arena")).andExpect(status().isOk())
+				.andExpect(view().name("halls/list")).andExpect(model().attributeExists("dvorane"))
+				.andExpect(model().attribute("query", "Arena"));
 
-        verify(dvoranaService, times(1)).search(eq("Arena"));
-    }
+		verify(dvoranaService, times(1)).search(eq("Arena"));
+	}
 
-    @Test
-    public void DvoranaController_GetDvoranaForm_ReturnFormView() throws Exception {
-        when(dvoranaService.findAllUnusedLokacije()).thenReturn(List.of());
+	@Test
+	public void DvoranaController_GetDvoranaForm_ReturnFormView() throws Exception {
+		when(dvoranaService.findAllUnusedLokacije(null)).thenReturn(List.of());
 
-        mockMvc.perform(get("/dvorane/new"))
-                .andExpect(status().isOk())
-                .andExpect(view().name("halls/form"))
-                .andExpect(model().attributeExists("dvorana"))
-                .andExpect(model().attributeExists("lokacije"));
+		mockMvc.perform(get("/dvorane/new")).andExpect(status().isOk()).andExpect(view().name("halls/form"))
+				.andExpect(model().attributeExists("dvorana")).andExpect(model().attributeExists("lokacije"));
 
-        verify(dvoranaService, times(1)).findAllUnusedLokacije();
-    }
+		verify(dvoranaService, times(1)).findAllUnusedLokacije(null);
+	}
 
-    @Test
-    public void DvoranaController_PostDvorana_ReturnListView() throws Exception {
-        mockMvc.perform(post("/dvorane")
-                        .param("naziv", "Dvorana")
-                        .param("lokacijaId", "1"))
-                .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/dvorane"))
-                .andExpect(flash().attribute("successMessage", "Dvorana je uspješno spremljena."));
+	@Test
+	public void DvoranaController_PostDvorana_ReturnListView() throws Exception {
+		mockMvc.perform(post("/dvorane").param("naziv", "Dvorana").param("lokacijaId", "1"))
+				.andExpect(status().is3xxRedirection()).andExpect(redirectedUrl("/dvorane"))
+				.andExpect(flash().attribute("successMessage", "Dvorana je uspješno spremljena."));
 
-        verify(dvoranaService, times(1)).save(any(DvoranaFormDto.class));
-    }
+		verify(dvoranaService, times(1)).save(any(DvoranaFormDto.class));
+	}
 
-    @Test
-    public void DvoranaController_PostInvalidDvorana_ReturnFormView() throws Exception {
-        when(dvoranaService.findAllUnusedLokacije()).thenReturn(List.of());
+	@Test
+	public void DvoranaController_PostInvalidDvorana_ReturnFormView() throws Exception {
+		when(dvoranaService.findAllUnusedLokacije(1L)).thenReturn(List.of());
 
-        mockMvc.perform(post("/dvorane")
-                        .param("naziv", "")
-                        .param("lokacijaId", "1"))
-                .andExpect(status().isOk())
-                .andExpect(view().name("halls/form"))
-                .andExpect(model().hasErrors())
-                .andExpect(model().attributeExists("lokacije"));
+		mockMvc.perform(post("/dvorane").param("naziv", "").param("lokacijaId", "1")).andExpect(status().isOk())
+				.andExpect(view().name("halls/form")).andExpect(model().hasErrors())
+				.andExpect(model().attributeExists("lokacije"));
 
-        verify(dvoranaService, times(1)).findAllUnusedLokacije();
-        verify(dvoranaService, never()).save(any(DvoranaFormDto.class));
-    }
+		verify(dvoranaService, times(1)).findAllUnusedLokacije(1L);
+		verify(dvoranaService, never()).save(any(DvoranaFormDto.class));
+	}
 
-    @Test
-    public void DvoranaController_GetDvoranaFormToEdit_ReturnFormView() throws Exception {
-        when(dvoranaService.getFormDtoById(anyLong())).thenReturn(new DvoranaFormDto());
-        when(dvoranaService.findAllUnusedLokacije()).thenReturn(List.of());
+	@Test
+	public void DvoranaController_GetDvoranaFormToEdit_ReturnFormView() throws Exception {
+		DvoranaFormDto dto = new DvoranaFormDto();
+		dto.setLokacijaId(1L);
+		when(dvoranaService.getFormDtoById(anyLong())).thenReturn(dto);
+		when(dvoranaService.findAllUnusedLokacije(eq(1L))).thenReturn(List.of());
 
-        mockMvc.perform(get("/dvorane/edit/1"))
-                .andExpect(status().isOk())
-                .andExpect(view().name("halls/form"))
-                .andExpect(model().attributeExists("dvorana"))
-                .andExpect(model().attributeExists("lokacije"));
+		mockMvc.perform(get("/dvorane/edit/1")).andExpect(status().isOk()).andExpect(view().name("halls/form"))
+				.andExpect(model().attributeExists("dvorana")).andExpect(model().attributeExists("lokacije"));
 
-        verify(dvoranaService, times(1)).getFormDtoById(anyLong());
-        verify(dvoranaService, times(1)).findAllUnusedLokacije();
-    }
+		verify(dvoranaService, times(1)).getFormDtoById(eq(1L));
+		verify(dvoranaService, times(1)).findAllUnusedLokacije(eq(1L));
+	}
 
-    @Test
-    public void DvoranaController_PostDvoranaFormToEdit_ReturnListView() throws Exception {
-        mockMvc.perform(post("/dvorane/edit/1")
-                        .param("naziv", "Dvorana")
-                        .param("lokacijaId", "1"))
-                .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/dvorane"))
-                .andExpect(flash().attribute("successMessage", "Dvorana je uspješno spremljena."));
+	@Test
+	public void DvoranaController_PostDvoranaFormToEdit_ReturnListView() throws Exception {
+		mockMvc.perform(post("/dvorane/edit/1").param("naziv", "Dvorana").param("lokacijaId", "1"))
+				.andExpect(status().is3xxRedirection()).andExpect(redirectedUrl("/dvorane"))
+				.andExpect(flash().attribute("successMessage", "Dvorana je uspješno spremljena."));
 
-        verify(dvoranaService, times(1)).update(eq(1L), any(DvoranaFormDto.class));
-    }
+		verify(dvoranaService, times(1)).update(eq(1L), any(DvoranaFormDto.class));
+	}
 
-    @Test
-    public void DvoranaController_PostInvalidDvoranaFormToEdit_ReturnFormView() throws Exception {
-        when(dvoranaService.findAllUnusedLokacije()).thenReturn(List.of());
+	@Test
+	public void DvoranaController_PostInvalidDvoranaFormToEdit_ReturnFormView() throws Exception {
+		when(dvoranaService.findAllUnusedLokacije(1L)).thenReturn(List.of());
 
-        mockMvc.perform(post("/dvorane/edit/1")
-                        .param("naziv", "")
-                        .param("lokacijaId", "1"))
-                .andExpect(status().isOk())
-                .andExpect(view().name("halls/form"))
-                .andExpect(model().hasErrors())
-                .andExpect(model().attributeExists("lokacije"));
+		mockMvc.perform(post("/dvorane/edit/1").param("naziv", "").param("lokacijaId", "1")).andExpect(status().isOk())
+				.andExpect(view().name("halls/form")).andExpect(model().hasErrors())
+				.andExpect(model().attributeExists("lokacije"));
 
-        verify(dvoranaService, times(1)).findAllUnusedLokacije();
-        verify(dvoranaService, never()).update(eq(1L), any(DvoranaFormDto.class));
-    }
+		verify(dvoranaService, times(1)).findAllUnusedLokacije(1L);
+		verify(dvoranaService, never()).update(eq(1L), any(DvoranaFormDto.class));
+	}
 
-    @Test
-    public void DvoranaController_DeleteDvorana_ReturnListView() throws Exception {
-        mockMvc.perform(post("/dvorane/delete/1"))
-                .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/dvorane"))
-                .andExpect(flash().attribute("successMessage", "Dvorana je uspješno obrisana."));
+	@Test
+	public void DvoranaController_DeleteDvorana_ReturnListView() throws Exception {
+		mockMvc.perform(post("/dvorane/delete/1")).andExpect(status().is3xxRedirection())
+				.andExpect(redirectedUrl("/dvorane"))
+				.andExpect(flash().attribute("successMessage", "Dvorana je uspješno obrisana."));
 
-        verify(dvoranaService, times(1)).deleteById(eq(1L));
-    }
+		verify(dvoranaService, times(1)).deleteById(eq(1L));
+	}
 
 }

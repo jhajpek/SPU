@@ -31,11 +31,17 @@ public class DvoranaServiceImpl implements DvoranaService {
 	}
 
 	@Override
-	public List<Lokacija> findAllUnusedLokacije() {
-		Set<Long> used = dvoranaRepository.findAll().stream().
-				map(d -> d.getLokacija().getLokacijaId()).collect(Collectors.toSet());
-		return lokacijaRepository.findAll().stream().
-				filter(l -> !used.contains(l.getLokacijaId())).toList();
+	public List<Lokacija> findAllUnusedLokacije(Long id) {
+		Set<Long> used = dvoranaRepository.findAll().stream().map(d -> d.getLokacija().getLokacijaId())
+				.collect(Collectors.toSet());
+		List<Lokacija> lokacije = lokacijaRepository.findAll().stream().filter(l -> !used.contains(l.getLokacijaId()))
+				.collect(Collectors.toList());
+		if (id != null) {
+			Lokacija trenutna = lokacijaRepository.findById(id).orElseThrow();
+			lokacije.add(trenutna);
+		}
+
+		return lokacije;
 	}
 
 	@Override

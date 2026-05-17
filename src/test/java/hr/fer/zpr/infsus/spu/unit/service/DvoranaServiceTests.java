@@ -52,7 +52,7 @@ public class DvoranaServiceTests {
         when(dvoranaRepository.findAll()).thenReturn(List.of(dvorana));
         when(lokacijaRepository.findAll()).thenReturn(List.of(lokacija1, lokacija2));
 
-        List<Lokacija> lokacije = dvoranaServiceImpl.findAllUnusedLokacije();
+        List<Lokacija> lokacije = dvoranaServiceImpl.findAllUnusedLokacije(null);
 
         Assertions.assertEquals(1, lokacije.size());
         Assertions.assertEquals(2L, lokacije.get(0).getLokacijaId());

@@ -92,6 +92,7 @@ public class DogadajController {
 
 	@PostMapping("/delete/{id}")
 	public String delete(@PathVariable Long id, RedirectAttributes redirectAttributes) {
+		
 		dogadajService.deleteById(id);
 		redirectAttributes.addFlashAttribute("successMessage", "Događaj je uspješno izbrisan.");
 		return "redirect:/dogadaji";
@@ -99,6 +100,7 @@ public class DogadajController {
 
 	@GetMapping("/{id}")
 	public String details(@PathVariable Long id, Model model) {
+		
 		DogadajDetailsDto dto = dogadajService.getDetailsById(id);
 		model.addAttribute("details", dto);
 		model.addAttribute("noviCjenik", dto.getNoviCjenik());

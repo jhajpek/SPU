@@ -15,6 +15,7 @@ public class GlobalExceptionHandler {
 	@ExceptionHandler(IllegalArgumentException.class)
 	public String handleIllegalArgument(IllegalArgumentException e, HttpServletRequest request,
 			RedirectAttributes redirectAttributes) {
+
 		redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
 		return "redirect:" + request.getHeader("Referer");
 	}
@@ -22,18 +23,21 @@ public class GlobalExceptionHandler {
 	@ExceptionHandler(DataIntegrityViolationException.class)
 	public String handleDataIntegrityViolation(DataIntegrityViolationException e, HttpServletRequest request,
 			RedirectAttributes redirectAttributes) {
+
 		redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
 		return "redirect:" + request.getHeader("Referer");
 	}
 
 	@ExceptionHandler(NoResourceFoundException.class)
 	public String handleNoResourceFound(NoResourceFoundException e, Model model) {
+
 		model.addAttribute("errorMessage", "Stranica koju tražite ne postoji.");
 		return "error/error";
 	}
 
 	@ExceptionHandler(Exception.class)
 	public String handleGeneralException(Exception e, Model model) {
+
 		model.addAttribute("errorMessage", "Dogodila se pogreška na poslužitelju.");
 		return "error/error";
 	}
