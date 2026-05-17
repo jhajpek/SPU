@@ -27,6 +27,7 @@ import java.time.LocalDateTime;
 
 @DataJpaTest
 @ActiveProfiles("test")
+
 public class RezervacijaRepositoryTests {
 
     @Autowired
@@ -57,13 +58,7 @@ public class RezervacijaRepositoryTests {
     private Sjedalo testSjedalo;
 
     @BeforeEach
-    public void cleanUpRepositoriesBeforeEachTest() {
-        rezervacijaRepository.deleteAll();
-        dogadajRepository.deleteAll();
-        sektorRepository.deleteAll();
-        dvoranaRepository.deleteAll();
-        lokacijaRepository.deleteAll();
-        korisnikRepository.deleteAll();
+    public void setUpTestEntities() {
         testKupac = korisnikRepository.save(EntityFactory.createKupac());
         Lokacija lokacija = lokacijaRepository.save(EntityFactory.createLokacija());
         Dvorana dvorana = dvoranaRepository.save(EntityFactory.createDvorana("Arena", lokacija));

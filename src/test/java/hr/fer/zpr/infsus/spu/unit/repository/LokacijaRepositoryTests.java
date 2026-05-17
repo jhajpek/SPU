@@ -5,7 +5,6 @@ import hr.fer.zpr.infsus.spu.repository.LokacijaRepository;
 import hr.fer.zpr.infsus.spu.util.EntityFactory;
 import jakarta.validation.ConstraintViolationException;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.data.jpa.test.autoconfigure.DataJpaTest;
@@ -19,11 +18,6 @@ public class LokacijaRepositoryTests {
 
     @Autowired
     private LokacijaRepository lokacijaRepository;
-
-    @BeforeEach
-    public void cleanUpRepositoryBeforeEachTest() {
-        lokacijaRepository.deleteAll();
-    }
 
     @Test
     public void LokacijaRepository_SaveAndFindAllLokacije_ReturnLokacijaList() {

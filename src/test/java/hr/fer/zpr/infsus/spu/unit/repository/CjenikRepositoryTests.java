@@ -50,12 +50,7 @@ public class CjenikRepositoryTests {
     private Sektor testSektor2;
 
     @BeforeEach
-    public void cleanUpRepositoriesBeforeEachTest() {
-        cjenikRepository.deleteAll();
-        dogadajRepository.deleteAll();
-        sektorRepository.deleteAll();
-        dvoranaRepository.deleteAll();
-        lokacijaRepository.deleteAll();
+    public void setUpTestEntities() {
         Lokacija lokacija = lokacijaRepository.save(EntityFactory.createLokacija());
         Dvorana dvorana = dvoranaRepository.save(EntityFactory.createDvorana("Arena", lokacija));
         testDogadaj1 = dogadajRepository.save(EntityFactory.createDogadaj("Dogadaj1", dvorana));

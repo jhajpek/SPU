@@ -6,7 +6,6 @@ import hr.fer.zpr.infsus.spu.repository.KorisnikRepository;
 import hr.fer.zpr.infsus.spu.util.EntityFactory;
 import jakarta.validation.ConstraintViolationException;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.data.jpa.test.autoconfigure.DataJpaTest;
@@ -24,11 +23,6 @@ public class AdministratorRepositoryTests {
 
     @Autowired
     private AdministratorRepository administratorRepository;
-
-    @BeforeEach
-    public void cleanUpRepositoriesBeforeEachTest() {
-        korisnikRepository.deleteAll();
-    }
 
     @Test
     public void AdministratorRepository_SaveAndFindAdministrator_ReturnSavedAdministrator() {

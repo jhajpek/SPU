@@ -33,8 +33,7 @@ public class SektorRepositoryTests {
     private Dvorana testDvorana;
 
     @BeforeEach
-    public void cleanUpRepositoriesBeforeEachTest() {
-        dvoranaRepository.deleteAll();
+    public void setUpTestEntities() {
         Lokacija lokacija = lokacijaRepository.save(EntityFactory.createLokacija());
         testDvorana = dvoranaRepository.save(EntityFactory.createDvorana("Arena", lokacija));
     }

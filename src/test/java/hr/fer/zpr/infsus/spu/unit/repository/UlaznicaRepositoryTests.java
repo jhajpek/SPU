@@ -59,13 +59,7 @@ public class UlaznicaRepositoryTests {
     private Sjedalo testSjedalo2;
 
     @BeforeEach
-    public void cleanUpRepositoriesBeforeEachTest() {
-        ulaznicaRepository.deleteAll();
-        dogadajRepository.deleteAll();
-        sektorRepository.deleteAll();
-        dvoranaRepository.deleteAll();
-        lokacijaRepository.deleteAll();
-        korisnikRepository.deleteAll();
+    public void setUpTestEntities() {
         testKupac = korisnikRepository.save(EntityFactory.createKupac());
         Lokacija lokacija = lokacijaRepository.save(EntityFactory.createLokacija());
         Dvorana dvorana = dvoranaRepository.save(EntityFactory.createDvorana("Arena", lokacija));

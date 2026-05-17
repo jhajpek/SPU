@@ -9,7 +9,6 @@ import hr.fer.zpr.infsus.spu.repository.SektorRepository;
 import hr.fer.zpr.infsus.spu.util.EntityFactory;
 import jakarta.validation.ConstraintViolationException;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.data.jpa.test.autoconfigure.DataJpaTest;
@@ -30,11 +29,6 @@ public class DvoranaRepositoryTests {
 
     @Autowired
     private SektorRepository sektorRepository;
-
-    @BeforeEach
-    public void cleanUpRepositoriesBeforeEachTest() {
-        dvoranaRepository.deleteAll();
-    }
 
     @Test
     public void DvoranaRepository_FindDvoranaByLokacijaId_ReturnDvoranaExists() {

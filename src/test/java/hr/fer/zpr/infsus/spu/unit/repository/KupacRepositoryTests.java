@@ -6,7 +6,6 @@ import hr.fer.zpr.infsus.spu.repository.KupacRepository;
 import hr.fer.zpr.infsus.spu.util.EntityFactory;
 import jakarta.validation.ConstraintViolationException;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.data.jpa.test.autoconfigure.DataJpaTest;
@@ -24,11 +23,6 @@ public class KupacRepositoryTests {
     
     @Autowired
     private KupacRepository kupacRepository;
-
-    @BeforeEach
-    public void cleanUpRepositoriesBeforeEachTest() {
-        korisnikRepository.deleteAll();
-    }
 
     @Test
     public void KupacRepository_SaveAndFindKupac_ReturnSavedKupac() {

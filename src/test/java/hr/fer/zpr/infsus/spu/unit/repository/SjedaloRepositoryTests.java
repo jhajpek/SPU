@@ -38,9 +38,7 @@ public class SjedaloRepositoryTests {
     private Sektor testSektor;
 
     @BeforeEach
-    public void cleanUpRepositoriesBeforeEachTest() {
-        dvoranaRepository.deleteAll();
-        lokacijaRepository.deleteAll();
+    public void setUpTestEntities() {
         Lokacija lokacija = lokacijaRepository.save(EntityFactory.createLokacija());
         Dvorana dvorana = dvoranaRepository.save(EntityFactory.createDvorana("Arena", lokacija));
         testSektor = sektorRepository.save(EntityFactory.createSektor("Tribina", 200, dvorana));
