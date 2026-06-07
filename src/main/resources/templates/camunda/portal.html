@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Camunda Portal</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+
+<body>
+
+    <div class="container">
+
+        <div class="top-bar">
+
+            <h1>
+                Portal korisnika:
+                <span th:text="${username}"></span>
+            </h1>
+
+            <a class="btn" th:href="@{/camunda-dashboard}">
+                Povratak
+            </a>
+
+        </div>
+
+        <div th:if="${group == 'organizatori'}">
+
+            <div class="card">
+
+                <h2>Postojeći događaji</h2>
+
+                <table>
+
+                    <tr>
+                        <th>Naziv</th>
+                        <th>Dvorana</th>
+                        <th>Datum i vrijeme</th>
+                    </tr>
+
+                    <tr th:each="d : ${dogadaji}">
+
+                        <td th:text="${d.naziv}"></td>
+
+                        <td th:text="${d.dvorana.naziv}"></td>
+
+                        <td th:text="${#temporals.format(
+                        d.datumVrijemeOdrzavanja,
+                        'dd.MM.yyyy HH:mm')}">
+                        </td>
+
+                    </tr>
+
+                </table>
+
+            </div>
+
+            <div class="card">
+
+                <h2>Pokretanje novog procesa</h2>
+
+                <form th:action="@{/camunda-dashboard/start}" th:object="${startProcess}" method="post">
+
+                    <div>
+
+                        <label>Naziv događaja</label>
+
+                        <input type="text" th:field="*{eventName}" required>
+
+                    </div>
+
+                    <div>
+
+                        <label>Dvorana</label>
+
+                        <select th:field="*{dvoranaId}">
+
+                            <option th:each="d : ${dvorane}" th:value="${d.dvoranaId}" th:text="${d.naziv}">
+                            </option>
+
+                        </select>
+
+                    </div>
+
+                    <div>
+
+                        <label>Datum i vrijeme</label>
+
+                        <input type="datetime-local" th:field="*{eventDate}" required>
+
+                    </div>
+
+                    <button id="addbtn">
+                        Pokreni proces
+                    </button>
+
+                </form>
+
+            </div>
+
+        </div>
+
+        <h2>Zadaci:</h2>
+
+        <div th:if="${#lists.isEmpty(tasks)
+             and #lists.isEmpty(waitingApprovals)}" class="success">
+
+            Trenutno nema otvorenih zadataka.
+
+        </div>
+
+        <div class="card" th:each="task : ${tasks}">
+
+            <h2 th:text="${task.name}"></h2>
+
+            <p>
+                <b>Događaj:</b>
+                <span th:text="${task.processData.eventName}"></span>
+            </p>
+
+            <p>
+                <b>Dvorana:</b>
+                <span th:text="${task.processData.dvoranaNaziv}"></span>
+            </p>
+
+            <p>
+                <b>Termin:</b>
+                <span th:text="${#temporals.format(
+                task.processData.eventDate,
+                'dd.MM.yyyy HH:mm')}">
+                </span>
+            </p>
+
+            <div th:if="${task.name == 'Provjera podataka'}">
+
+                <form th:action="@{/camunda-dashboard/valid/{id}(id=${task.id})}" method="post">
+
+                    <button>
+                        Podaci ispravni
+                    </button>
+
+                </form>
+
+                <form th:action="@{/camunda-dashboard/invalid/{id}(id=${task.id})}" method="post">
+
+                    <button id="deletebtn">
+                        Vrati organizatoru
+                    </button>
+
+                </form>
+
+            </div>
+
+
+            <div th:if="${task.name == 'Ispravi događaj'}">
+
+                <form th:action="@{/camunda-dashboard/fixEvent/{id}(id=${task.id})}" method="post">
+
+                    <label>Naziv događaja</label>
+
+                    <input type="text" name="eventName" th:value="${task.processData.eventName}" required>
+
+                    <label>Dvorana</label>
+
+                    <select name="dvoranaId" required>
+
+                        <option th:each="d : ${dvorane}" th:value="${d.dvoranaId}" th:text="${d.naziv}"
+                            th:selected="${d.dvoranaId == task.processData.dvoranaId}">
+                        </option>
+
+                    </select>
+
+                    <label>Datum i vrijeme</label>
+
+                    <input type="datetime-local" name="eventDate" th:value="${#temporals.format(
+                    task.processData.eventDate,
+                    'yyyy-MM-dd''T''HH:mm')}" required>
+
+                    <button>
+                        Spremi izmjene
+                    </button>
+
+                </form>
+
+            </div>
+
+
+            <div th:if="${task.name == 'Promijeni datum/vrijeme'}">
+
+                <p class="error">
+
+                    Odabrani termin nije dostupan.
+
+                </p>
+
+                <form th:action="@{/camunda-dashboard/changeDate/{id}(id=${task.id})}" method="post">
+
+                    <input type="datetime-local" name="eventDate" required>
+
+                    <button>
+                        Promijeni termin
+                    </button>
+
+                </form>
+
+            </div>
+
+        </div>
+
+        <div th:if="${group == 'admin'}">
+            <div th:if="${waitingApprovals != null}">
+
+                <div class="card" th:each="approval : ${waitingApprovals}">
+
+                    <h2>
+                        Čekanje odluke administratora
+                    </h2>
+
+                    <p>
+                        <b>Događaj:</b>
+                        <span th:text="${approval.processData.eventName}"></span>
+                    </p>
+
+                    <p>
+                        <b>Dvorana:</b>
+                        <span th:text="${approval.processData.dvoranaNaziv}"></span>
+                    </p>
+
+                    <p>
+                        <b>Termin:</b>
+                        <span th:text="${#temporals.format(
+                    approval.processData.eventDate,
+                    'dd.MM.yyyy HH:mm')}">
+                        </span>
+                    </p>
+
+                    <form th:action="@{/camunda-dashboard/approve}" method="post">
+
+                        <input type="hidden" name="processInstanceId" th:value="${approval.processInstanceId}">
+
+                        <button>
+                            Odobri
+                        </button>
+
+                    </form>
+
+                    <form th:action="@{/camunda-dashboard/reject}" method="post">
+
+                        <input type="hidden" name="processInstanceId" th:value="${approval.processInstanceId}">
+
+                        <button id="deletebtn">
+                            Odbij
+                        </button>
+
+                    </form>
+
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+
+</body>
+
+</html>

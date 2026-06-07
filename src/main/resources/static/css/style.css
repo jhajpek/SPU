@@ -164,3 +164,24 @@ button:hover,
 #addbtn {
   background-color: green;
 }
+
+.card {
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  padding: 20px;
+  margin-bottom: 20px;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+}
+
+.card p {
+  margin-bottom: 10px;
+}
+
+form {
+  margin-top: 10px;
+}
+
+form button {
+  margin-top: 10px;
+}

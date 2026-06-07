@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<meta charset="UTF-8">
+	<title>Camunda</title>
+	<link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+
+<body>
+
+	<div class="container">
+
+		<div class="top-bar">
+			<h1>Camunda - Kreiranje događaja</h1>
+			<div class="actions">
+				<a class="btn" th:href="@{/dogadaji}"> Dogadaji </a>
+			</div>
+		</div>
+
+
+		<div class="card">
+
+			<h2>Korisnički portali:</h2>
+
+			<div class="actions">
+
+				<a class="btn" th:href="@{/camunda-dashboard/mario}">
+					Mario - organizator
+					(<span th:text="${marioCount}"></span>)
+				</a>
+
+				<a class="btn" th:href="@{/camunda-dashboard/jozo}">
+					Jozo - reviewer
+					(<span th:text="${jozoCount}"></span>)
+				</a>
+
+				<a class="btn" th:href="@{/camunda-dashboard/ronaldo}">
+					Ronaldo - admin
+					(<span th:text="${ronaldoCount}"></span>)
+				</a>
+
+			</div>
+
+		</div>
+
+	</div>
+
+</body>
+
+</html>
